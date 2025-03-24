@@ -9,8 +9,10 @@ use embedded_graphics::draw_target::DrawTarget;
 use embedded_graphics::geometry::{self, Dimensions};
 use embedded_graphics::mono_font::{MonoFont, MonoTextStyleBuilder};
 use embedded_graphics::pixelcolor::{PixelColor, RgbColor};
+use embedded_graphics::primitives::Rectangle;
 use embedded_graphics::text::Text;
 use embedded_graphics::Drawable;
+use embedded_graphics_framebuf::FrameBuf;
 
 use backend::WindowSize;
 use buffer::Cell;
@@ -39,15 +41,20 @@ enum TermColorType {
 
 struct TermColor(Color, TermColorType);
 
-pub struct EmbeddedBackend<'display, D, C>
+pub struct EmbeddedBackend<'display, D, C, const N: usize>
 where
     D: DrawTarget<Color = C> + 'display,
+    C: PixelColor + 'display,
 {
     #[cfg(not(feature = "simulator"))]
     display: &'display mut D,
     #[cfg(feature = "simulator")]
     display: &'display mut SimulatorDisplay<C>,
+    display_area: Rectangle,
     display_type: PhantomData<D>,
+
+    buffer: FrameBuf<C, [C; N]>,
+
     font_regular: MonoFont<'static>,
     font_bold: MonoFont<'static>,
 
@@ -60,26 +67,50 @@ where
     simulator_window: Window,
 }
 
-impl<'display, D, C> EmbeddedBackend<'display, D, C>
+impl<'display, D, C, const N: usize> EmbeddedBackend<'display, D, C, N>
 where
     D: DrawTarget<Color = C> + Dimensions,
-    C: PixelColor + Into<Rgb888> + From<Rgb888>,
+    C: RgbColor + Into<Rgb888> + From<Rgb888>,
 {
     pub fn new(
         #[cfg(not(feature = "simulator"))] display: &'display mut D,
         #[cfg(feature = "simulator")] display: &'display mut SimulatorDisplay<C>,
+    ) -> EmbeddedBackend<'display, D, C, N> {
+        Self::with_font(display, None, None)
+    }
+
+    pub fn with_font(
+        #[cfg(not(feature = "simulator"))] display: &'display mut D,
+        #[cfg(feature = "simulator")] display: &'display mut SimulatorDisplay<C>,
         font_regular: Option<MonoFont<'static>>,
         font_bold: Option<MonoFont<'static>>,
-    ) -> EmbeddedBackend<'display, D, C> {
-        let pixels = Size {
-            width: display.bounding_box().size.width as u16,
-            height: display.bounding_box().size.height as u16,
-        };
+    ) -> EmbeddedBackend<'display, D, C, N> {
         let font_regular = font_regular.unwrap_or(default_font::regular);
         let font_bold = font_bold.unwrap_or(default_font::bold);
+        Self::init(display, font_regular, font_bold)
+    }
+
+    fn init(
+        #[cfg(not(feature = "simulator"))] display: &'display mut D,
+        #[cfg(feature = "simulator")] display: &'display mut SimulatorDisplay<C>,
+        font_regular: MonoFont<'static>,
+        font_bold: MonoFont<'static>,
+    ) -> EmbeddedBackend<'display, D, C, N> {
+        let display_area = display.bounding_box();
+        let pixels = Size {
+            width: display_area.size.width as u16,
+            height: display_area.size.height as u16,
+        };
+
         Self {
             display,
+            display_area,
             display_type: PhantomData,
+            buffer: FrameBuf::new(
+                [C::BLACK; N],
+                display_area.size.width as usize,
+                display_area.size.height as usize,
+            ),
             font_regular,
             font_bold,
             char_offset: geometry::Point::new(0, font_regular.character_size.height as i32),
@@ -212,7 +243,7 @@ macro_rules! impl_for_color {
             }
         }
 
-        impl<D> Backend for EmbeddedBackend<'_, D, $color_type>
+        impl<D, const N: usize> Backend for EmbeddedBackend<'_, D, $color_type, N>
         where
             D: DrawTarget<Color = $color_type>,
         {
@@ -243,7 +274,7 @@ macro_rules! impl_for_color {
                     let style = style_builder.build();
 
                     Text::new(cell.symbol(), position + self.char_offset, style)
-                        .draw(self.display)
+                        .draw(&mut self.buffer)
                         .map_err(|_| io::Error::new(io::ErrorKind::Other, DrawError))?;
                 }
                 Ok(())
@@ -290,10 +321,13 @@ macro_rules! impl_for_color {
             }
 
             fn flush(&mut self) -> io::Result<()> {
+                // TODO map error...
+                self.display
+                    .fill_contiguous(&self.display_area, self.buffer.data)
+                    .ok();
+
                 #[cfg(feature = "simulator")]
                 self.update_simulation()?;
-
-                // buffer is flushed after each character draw
                 Ok(())
             }
         }
