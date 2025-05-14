@@ -1,10 +1,12 @@
 //! Example using a simulator.
 use mousefood::embedded_graphics::geometry;
+use mousefood::error::Error;
 use mousefood::prelude::*;
-use mousefood::ratatui::widgets::{Block, Paragraph, Wrap};
 use mousefood::simulator::SimulatorDisplay;
+use ratatui::widgets::{Block, Paragraph, Wrap};
+use ratatui::{style::*, Frame, Terminal};
 
-fn main() -> Result<(), std::io::Error> {
+fn main() -> Result<(), Error> {
     let mut display = SimulatorDisplay::<Bgr565>::new(geometry::Size::new(128, 64));
     let backend: EmbeddedBackend<SimulatorDisplay<_>, _> =
         EmbeddedBackend::new(&mut display, EmbeddedBackendConfig::default());
