@@ -207,6 +207,12 @@ where
                 }
             }
 
+            if cell.underline_color != style::Color::Reset {
+                style_builder = style_builder.underline_with_color(
+                    TermColor(cell.underline_color, TermColorType::Foreground).into(),
+                );
+            }
+
             Text::new(
                 cell.symbol(),
                 position + self.char_offset,
