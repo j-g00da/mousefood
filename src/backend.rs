@@ -85,6 +85,9 @@ where
     columns_rows: layout::Size,
     pixels: layout::Size,
 
+    cursor_visible: bool,
+    cursor_position: layout::Position,
+
     #[cfg(feature = "simulator")]
     simulator_window: Window,
 }
@@ -121,6 +124,8 @@ where
                 width: pixels.width / font_regular.character_size.width as u16,
             },
             pixels,
+            cursor_visible: false,
+            cursor_position: layout::Position::new(0, 0),
             #[cfg(feature = "simulator")]
             simulator_window: Window::new(
                 "mousefood emulator",
@@ -219,25 +224,21 @@ where
     }
 
     fn hide_cursor(&mut self) -> io::Result<()> {
-        // TODO
+        self.cursor_visible = false;
         Ok(())
     }
 
     fn show_cursor(&mut self) -> io::Result<()> {
-        // TODO
+        self.cursor_visible = true;
         Ok(())
     }
 
     fn get_cursor_position(&mut self) -> io::Result<layout::Position> {
-        // TODO
-        Ok(layout::Position::new(0, 0))
+        Ok(self.cursor_position)
     }
 
-    fn set_cursor_position<P: Into<layout::Position>>(
-        &mut self,
-        #[allow(unused_variables)] position: P,
-    ) -> io::Result<()> {
-        // TODO
+    fn set_cursor_position<P: Into<layout::Position>>(&mut self, position: P) -> io::Result<()> {
+        self.cursor_position = position.into();
         Ok(())
     }
 
