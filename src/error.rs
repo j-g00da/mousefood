@@ -1,12 +1,16 @@
-use core::{error, fmt};
+//! Mousefood `Error` enum.
 
-#[derive(Debug)]
-pub struct DrawError;
-
-impl error::Error for DrawError {}
-
-impl fmt::Display for DrawError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "writing to display failed")
-    }
+/// Represents backend error.
+#[derive(thiserror::Error, Debug)]
+pub enum Error {
+    /// Drawing to the display failed.
+    #[error("drawing to DrawTarget failed")]
+    DrawError,
+    /// Selected [`ClearType`] is not supported by Mousefood.
+    #[error("ClearType::{0} is not supported by Mousefood")]
+    ClearTypeUnsupported(alloc::string::String),
+    /// Simulator window was closed.
+    #[cfg(feature = "simulator")]
+    #[error("simulator window closed")]
+    SimulatorQuit,
 }

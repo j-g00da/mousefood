@@ -1,3 +1,4 @@
+#![no_std]
 #![doc = include_str!("../README.md")]
 
 extern crate alloc;
@@ -5,14 +6,13 @@ extern crate alloc;
 mod backend;
 mod colors;
 mod default_font;
-mod error;
+pub mod error;
 mod framebuffer;
 mod macros;
 pub mod prelude;
 
 pub use backend::{EmbeddedBackend, EmbeddedBackendConfig};
 pub use embedded_graphics;
-pub use ratatui;
 
 #[cfg(feature = "simulator")]
 pub use embedded_graphics_simulator as simulator;
