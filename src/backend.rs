@@ -5,12 +5,12 @@ use crate::colors::*;
 use crate::default_font;
 use crate::error::DrawError;
 use crate::framebuffer;
+use embedded_graphics::Drawable;
 use embedded_graphics::draw_target::DrawTarget;
 use embedded_graphics::geometry::{self, Dimensions};
 use embedded_graphics::mono_font::{MonoFont, MonoTextStyleBuilder};
 use embedded_graphics::pixelcolor::{PixelColor, Rgb888};
 use embedded_graphics::text::Text;
-use embedded_graphics::Drawable;
 #[cfg(feature = "simulator")]
 use embedded_graphics_simulator::{OutputSettings, SimulatorDisplay, SimulatorEvent, Window};
 use ratatui::backend::Backend;
