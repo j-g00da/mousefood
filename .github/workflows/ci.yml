@@ -79,3 +79,19 @@ jobs:
         run: cargo test --locked --lib --features epd-weact
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
+
+  examples:
+    runs-on: ubuntu-latest
+    name: Build examples
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install native dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsdl2-dev
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+      - name: Build examples
+        run: find examples -name "Cargo.toml" -exec cargo build --manifest-path {} \;
