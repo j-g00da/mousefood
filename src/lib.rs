@@ -14,8 +14,5 @@ pub use backend::{EmbeddedBackend, EmbeddedBackendConfig};
 pub use embedded_graphics;
 pub use ratatui;
 
-#[cfg(feature = "simulator")]
-pub use embedded_graphics_simulator as simulator;
-
 #[cfg(feature = "fonts")]
 pub use embedded_graphics_unicodefonts as fonts;

@@ -11,8 +11,6 @@ use embedded_graphics::geometry::{self, Dimensions};
 use embedded_graphics::mono_font::{MonoFont, MonoTextStyleBuilder};
 use embedded_graphics::pixelcolor::{PixelColor, Rgb888};
 use embedded_graphics::text::Text;
-#[cfg(feature = "simulator")]
-use embedded_graphics_simulator::{OutputSettings, SimulatorDisplay, SimulatorEvent, Window};
 use ratatui::backend::Backend;
 use ratatui::layout;
 use ratatui::style;
@@ -63,17 +61,9 @@ where
     D: DrawTarget<Color = C> + 'display,
     C: PixelColor + 'display,
 {
-    #[cfg(not(feature = "simulator"))]
     display: &'display mut D,
-    #[cfg(feature = "simulator")]
-    display: &'display mut SimulatorDisplay<C>,
     display_type: PhantomData<D>,
-
-    #[cfg(not(feature = "simulator"))]
     flush_callback: Box<dyn FnMut(&mut D)>,
-    #[cfg(feature = "simulator")]
-    flush_callback: Box<dyn FnMut(&mut SimulatorDisplay<C>)>,
-
     buffer: framebuffer::HeapBuffer<C>,
 
     font_regular: MonoFont<'static>,
@@ -84,9 +74,6 @@ where
 
     columns_rows: layout::Size,
     pixels: layout::Size,
-
-    #[cfg(feature = "simulator")]
-    simulator_window: Window,
 }
 
 impl<'display, D, C> EmbeddedBackend<'display, D, C>
@@ -95,10 +82,8 @@ where
     C: PixelColor + Into<Rgb888> + From<Rgb888> + From<TermColor> + 'static,
 {
     fn init(
-        #[cfg(not(feature = "simulator"))] display: &'display mut D,
-        #[cfg(feature = "simulator")] display: &'display mut SimulatorDisplay<C>,
-        #[cfg(not(feature = "simulator"))] flush_callback: impl FnMut(&mut D) + 'static,
-        #[cfg(feature = "simulator")] flush_callback: impl FnMut(&mut SimulatorDisplay<C>) + 'static,
+        display: &'display mut D,
+        flush_callback: impl FnMut(&mut D) + 'static,
         font_regular: MonoFont<'static>,
         font_bold: Option<MonoFont<'static>>,
         font_italic: Option<MonoFont<'static>>,
@@ -121,24 +106,13 @@ where
                 width: pixels.width / font_regular.character_size.width as u16,
             },
             pixels,
-            #[cfg(feature = "simulator")]
-            simulator_window: Window::new(
-                "mousefood emulator",
-                &OutputSettings {
-                    scale: 4,
-                    max_fps: 30,
-                    ..Default::default()
-                },
-            ),
         }
     }
 
     /// Creates a new `EmbeddedBackend` using default fonts.
     pub fn new(
-        #[cfg(not(feature = "simulator"))] display: &'display mut D,
-        #[cfg(feature = "simulator")] display: &'display mut SimulatorDisplay<C>,
-        #[cfg(not(feature = "simulator"))] config: EmbeddedBackendConfig<D, C>,
-        #[cfg(feature = "simulator")] config: EmbeddedBackendConfig<SimulatorDisplay<C>, C>,
+        display: &'display mut D,
+        config: EmbeddedBackendConfig<D, C>,
     ) -> EmbeddedBackend<'display, D, C> {
         Self::init(
             display,
@@ -147,22 +121,6 @@ where
             config.font_bold,
             config.font_italic,
         )
-    }
-
-    #[cfg(feature = "simulator")]
-    fn update_simulation(&mut self) -> io::Result<()> {
-        self.simulator_window.update(self.display);
-        if self
-            .simulator_window
-            .events()
-            .any(|e| e == SimulatorEvent::Quit)
-        {
-            return Err(io::Error::new(
-                io::ErrorKind::Other,
-                "simulator window closed",
-            ));
-        }
-        Ok(())
     }
 }
 
@@ -263,8 +221,6 @@ where
             .fill_contiguous(&self.display.bounding_box(), &self.buffer)
             .map_err(|_| io::Error::other(DrawError))?;
         (self.flush_callback)(self.display);
-        #[cfg(feature = "simulator")]
-        self.update_simulation()?;
         Ok(())
     }
 }

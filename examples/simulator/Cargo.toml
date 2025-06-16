@@ -1,0 +1,10 @@
+[package]
+name = "simulator"
+version = "0.0.0"
+workspace = "../../"
+edition = "2024"
+publish = false
+
+[dependencies]
+mousefood = { path = "../../" }
+embedded-graphics-simulator = "0.7"
