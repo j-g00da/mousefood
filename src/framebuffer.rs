@@ -1,12 +1,13 @@
 use alloc::{vec, vec::IntoIter, vec::Vec};
 
 use crate::colors::{TermColor, TermColorType};
+use embedded_graphics::Pixel;
 use embedded_graphics::draw_target::DrawTarget;
 use embedded_graphics::geometry::Dimensions;
 use embedded_graphics::pixelcolor::PixelColor;
 use embedded_graphics::primitives::Rectangle;
-use embedded_graphics::Pixel;
 use ratatui_core::style::Color;
+
 
 pub(crate) struct HeapBuffer<C: PixelColor + Copy> {
     pub data: Vec<C>,
@@ -72,8 +73,8 @@ mod tests {
     use rstest::{fixture, rstest};
 
     use embedded_graphics::mock_display::MockDisplay;
-    use embedded_graphics::mono_font::ascii::FONT_4X6;
     use embedded_graphics::mono_font::MonoTextStyle;
+    use embedded_graphics::mono_font::ascii::FONT_4X6;
     use embedded_graphics::pixelcolor::{Rgb888, RgbColor};
     use embedded_graphics::prelude::*;
     use embedded_graphics::text::Text;

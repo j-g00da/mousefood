@@ -2,7 +2,7 @@
 name = "mousefood"
 description = "embedded-graphics backend for Ratatui"
 version = "0.2.1"
-edition = "2021"
+edition = "2024"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 homepage = "https://github.com/j-g00da/mousefood"

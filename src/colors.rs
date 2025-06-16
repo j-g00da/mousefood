@@ -110,10 +110,10 @@ impl From<TermColor> for weact_studio_epd::TriColor {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use paste::paste;
-    use rstest::rstest;
     use Color::*;
     use TermColorType::*;
+    use paste::paste;
+    use rstest::rstest;
 
     macro_rules! into_eg_color {
         ($color_type:ident) => {
