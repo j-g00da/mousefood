@@ -101,6 +101,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.toolchain }}
+          target: ${{ matrix.target }}
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --target ${{ matrix.target }}
 
@@ -118,14 +119,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@v1
+      - uses: dtolnay/rust-toolchain@v4
         if: matrix.target == 'riscv32imc-esp-espidf'
         with:
           toolchain: nightly
           components: rustfmt, clippy, rust-src
+          target: ${{ matrix.target }}
       - uses: esp-rs/xtensa-toolchain@v1.5.1
         if: matrix.target != 'riscv32imc-esp-espidf'
         with:
           default: true
+          buildtargets: 'all'
       - uses: Swatinem/rust-cache@v2
-      - run: cargo build --release --target ${{ matrix.target }}
+      - run: cargo build --release --target ${{ matrix.target }} -Zbuild-std=std,panic_abort -Zbuild-std-features=panic_immediate_abort
