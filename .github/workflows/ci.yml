@@ -79,3 +79,53 @@ jobs:
         run: cargo test --locked --lib --features epd-weact
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
+
+  build-no-std:
+    name: build [no-std] ${{ matrix.target }} ${{ matrix.toolchain }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - arm-unknown-linux-gnueabi
+          - armv7-unknown-linux-gnueabihf
+          - x86_64-unknown-linux-gnu
+          - x86_64-unknown-linux-musl
+          - thumbv6m-none-eabi
+          - thumbv7em-none-eabi
+          - thumbv7em-none-eabihf
+          - thumbv7m-none-eabi
+        toolchain: [ "1.85.0", "stable" ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.toolchain }}
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --release --target ${{ matrix.target }}
+
+  build-espidf-std:
+    name: build [std] ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - riscv32imc-esp-espidf
+          - riscv32imac-esp-espidf
+          - xtensa-esp32-espidf
+          - xtensa-esp32s2-espidf
+          - xtensa-esp32s3-espidf
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@v1
+        if: matrix.target == 'riscv32imc-esp-espidf'
+        with:
+          toolchain: nightly
+          components: rustfmt, clippy, rust-src
+      - uses: esp-rs/xtensa-toolchain@v1.5.1
+        if: matrix.target != 'riscv32imc-esp-espidf'
+        with:
+          default: true
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --release --target ${{ matrix.target }}
