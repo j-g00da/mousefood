@@ -2,7 +2,7 @@ use crate::macros::for_all_rgb_colors;
 use embedded_graphics::pixelcolor::{
     Bgr555, Bgr565, Bgr666, Bgr888, BinaryColor, Rgb555, Rgb565, Rgb666, Rgb888, RgbColor,
 };
-use ratatui::style::Color;
+use ratatui_core::style::Color;
 
 pub enum TermColorType {
     Foreground,

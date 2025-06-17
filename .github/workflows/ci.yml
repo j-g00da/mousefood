@@ -80,7 +80,58 @@ jobs:
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
 
-  examples:
+  build-no-std:
+    name: build [no-std] ${{ matrix.target }} ${{ matrix.toolchain }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - arm-unknown-linux-gnueabi
+          - armv7-unknown-linux-gnueabihf
+          - x86_64-unknown-linux-gnu
+          - x86_64-unknown-linux-musl
+          - thumbv7em-none-eabi
+          - thumbv7em-none-eabihf
+          - thumbv7m-none-eabi
+          # no alloc::sync, required by kasuari
+          # - thumbv6m-none-eabi
+          # - riscv32imc-unknown-none-elf # esp32c2, esp32c3
+          # - riscv32imac-unknown-none-elf # esp32c6, esp32h2
+        toolchain: [ "1.85.0", "stable" ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.toolchain }}
+          target: ${{ matrix.target }}
+          components:
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --release --target ${{ matrix.target }}
+
+  build-espidf-std:
+    name: build [std] ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - riscv32imc-esp-espidf # esp32c2, esp32c3
+          - riscv32imac-esp-espidf # esp32c6, esp32h2
+          - xtensa-esp32-espidf
+          - xtensa-esp32s2-espidf
+          - xtensa-esp32s3-espidf
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: esp-rs/xtensa-toolchain@v1.5.4
+        with:
+          default: true
+          ldproxy: true
+          buildtargets: 'esp32,esp32s2,esp32s3,esp32c2,esp32c3,esp32c6,esp32h2'
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --release --features=std --target ${{ matrix.target }} -Zbuild-std=std,panic_abort -Zbuild-std-features=panic_immediate_abort
+
+  build-examples:
     runs-on: ubuntu-latest
     name: Build examples
     steps:

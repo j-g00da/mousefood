@@ -1,9 +1,8 @@
+use alloc::boxed::Box;
 use core::marker::PhantomData;
-use std::io;
 
 use crate::colors::*;
 use crate::default_font;
-use crate::error::DrawError;
 use crate::framebuffer;
 use embedded_graphics::Drawable;
 use embedded_graphics::draw_target::DrawTarget;
@@ -11,9 +10,9 @@ use embedded_graphics::geometry::{self, Dimensions};
 use embedded_graphics::mono_font::{MonoFont, MonoTextStyleBuilder};
 use embedded_graphics::pixelcolor::{PixelColor, Rgb888};
 use embedded_graphics::text::Text;
-use ratatui::backend::Backend;
-use ratatui::layout;
-use ratatui::style;
+use ratatui_core::backend::{Backend, ClearType};
+use ratatui_core::layout;
+use ratatui_core::style;
 
 /// Embedded backend configuration.
 pub struct EmbeddedBackendConfig<D, C>
@@ -124,14 +123,18 @@ where
     }
 }
 
+type Result<T, E = crate::error::Error> = core::result::Result<T, E>;
+
 impl<D, C> Backend for EmbeddedBackend<'_, D, C>
 where
     D: DrawTarget<Color = C> + 'static,
     C: PixelColor + Into<Rgb888> + From<Rgb888> + From<TermColor> + 'static,
 {
-    fn draw<'a, I>(&mut self, content: I) -> io::Result<()>
+    type Error = crate::error::Error;
+
+    fn draw<'a, I>(&mut self, content: I) -> Result<()>
     where
-        I: Iterator<Item = (u16, u16, &'a ratatui::buffer::Cell)>,
+        I: Iterator<Item = (u16, u16, &'a ratatui_core::buffer::Cell)>,
     {
         for (x, y, cell) in content {
             let position = geometry::Point::new(
@@ -165,28 +168,34 @@ where
                 }
             }
 
+            if cell.underline_color != style::Color::Reset {
+                style_builder = style_builder.underline_with_color(
+                    TermColor(cell.underline_color, TermColorType::Foreground).into(),
+                );
+            }
+
             Text::new(
                 cell.symbol(),
                 position + self.char_offset,
                 style_builder.build(),
             )
             .draw(&mut self.buffer)
-            .map_err(|_| io::Error::other(DrawError))?;
+            .map_err(|_| crate::error::Error::DrawError)?;
         }
         Ok(())
     }
 
-    fn hide_cursor(&mut self) -> io::Result<()> {
+    fn hide_cursor(&mut self) -> Result<()> {
         // TODO
         Ok(())
     }
 
-    fn show_cursor(&mut self) -> io::Result<()> {
+    fn show_cursor(&mut self) -> Result<()> {
         // TODO
         Ok(())
     }
 
-    fn get_cursor_position(&mut self) -> io::Result<layout::Position> {
+    fn get_cursor_position(&mut self) -> Result<layout::Position> {
         // TODO
         Ok(layout::Position::new(0, 0))
     }
@@ -194,32 +203,44 @@ where
     fn set_cursor_position<P: Into<layout::Position>>(
         &mut self,
         #[allow(unused_variables)] position: P,
-    ) -> io::Result<()> {
+    ) -> Result<()> {
         // TODO
         Ok(())
     }
 
-    fn clear(&mut self) -> io::Result<()> {
+    fn clear(&mut self) -> Result<()> {
         self.buffer
-            .clear(TermColor(ratatui::style::Color::Reset, TermColorType::Background).into())
-            .map_err(|_| io::Error::other(DrawError))
+            .clear(TermColor(style::Color::Reset, TermColorType::Background).into())
+            .map_err(|_| crate::error::Error::DrawError)
     }
 
-    fn size(&self) -> io::Result<layout::Size> {
+    fn clear_region(&mut self, clear_type: ClearType) -> Result<()> {
+        match clear_type {
+            ClearType::All => self.clear(),
+            ClearType::AfterCursor
+            | ClearType::BeforeCursor
+            | ClearType::CurrentLine
+            | ClearType::UntilNewLine => Err(crate::error::Error::ClearTypeUnsupported(
+                alloc::format!("{:?}", clear_type),
+            )),
+        }
+    }
+
+    fn size(&self) -> Result<layout::Size> {
         Ok(self.columns_rows)
     }
 
-    fn window_size(&mut self) -> io::Result<ratatui::backend::WindowSize> {
-        Ok(ratatui::backend::WindowSize {
+    fn window_size(&mut self) -> Result<ratatui_core::backend::WindowSize> {
+        Ok(ratatui_core::backend::WindowSize {
             columns_rows: self.columns_rows,
             pixels: self.pixels,
         })
     }
 
-    fn flush(&mut self) -> io::Result<()> {
+    fn flush(&mut self) -> Result<()> {
         self.display
             .fill_contiguous(&self.display.bounding_box(), &self.buffer)
-            .map_err(|_| io::Error::other(DrawError))?;
+            .map_err(|_| crate::error::Error::DrawError)?;
         (self.flush_callback)(self.display);
         Ok(())
     }
