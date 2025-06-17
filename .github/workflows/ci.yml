@@ -145,4 +145,6 @@ jobs:
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
       - name: Build examples
-        run: find examples -name "Cargo.toml" -exec cargo build --manifest-path {} \;
+        # build all crates which manifest's path is ./examples/**/Cargo.toml
+        # use `xargs` to propagate `cargo build` failures
+        run: find examples -name "Cargo.toml" -print0 | xargs -0 -i cargo build --manifest-path {}
