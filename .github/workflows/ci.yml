@@ -95,6 +95,8 @@ jobs:
           - thumbv7em-none-eabi
           - thumbv7em-none-eabihf
           - thumbv7m-none-eabi
+          - riscv32imc-unknown-none-elf
+          - riscv32imac-unknown-none-elf
         toolchain: [ "1.85.0", "stable" ]
     runs-on: ubuntu-latest
     steps:
