@@ -90,16 +90,13 @@ jobs:
           - armv7-unknown-linux-gnueabihf
           - x86_64-unknown-linux-gnu
           - x86_64-unknown-linux-musl
-          # no alloc
-          # - thumbv6m-none-eabi
           - thumbv7em-none-eabi
           - thumbv7em-none-eabihf
           - thumbv7m-none-eabi
-          - xtensa-esp32-none-elf
-          - xtensa-esp32s2-none-elf
-          - xtensa-esp32s3-none-elf
-          - riscv32imc-unknown-none-elf # esp32c2, esp32c3
-          - riscv32imac-unknown-none-elf # esp32c6, esp32h2
+          # no alloc::sync, required by kasuari
+          # - thumbv6m-none-eabi
+          # - riscv32imc-unknown-none-elf # esp32c2, esp32c3
+          # - riscv32imac-unknown-none-elf # esp32c6, esp32h2
         toolchain: [ "1.85.0", "stable" ]
     runs-on: ubuntu-latest
     steps:
@@ -108,6 +105,26 @@ jobs:
         with:
           toolchain: ${{ matrix.toolchain }}
           target: ${{ matrix.target }}
+          components:
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --release --target ${{ matrix.target }}
+
+  build-xtensa-no-std:
+    name: build [no-std] ${{ matrix.target }} esp
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - xtensa-esp32-none-elf
+          - xtensa-esp32s2-none-elf
+          - xtensa-esp32s3-none-elf
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: esp-rs/xtensa-toolchain@v1.5.1
+        with:
+          default: true
+          buildtargets: 'all'
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --target ${{ matrix.target }}
 
@@ -117,24 +134,17 @@ jobs:
       fail-fast: false
       matrix:
         target:
-          - riscv32imc-esp-espidf
-          - riscv32imac-esp-espidf
+          - riscv32imc-esp-espidf # esp32c2, esp32c3
+          - riscv32imac-esp-espidf # esp32c6, esp32h2
           - xtensa-esp32-espidf
           - xtensa-esp32s2-espidf
           - xtensa-esp32s3-espidf
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@nightly
-        if: matrix.target == 'riscv32imc-esp-espidf'
-        with:
-          toolchain: nightly
-          components: rustfmt, clippy, rust-src
-          target: ${{ matrix.target }}
       - uses: esp-rs/xtensa-toolchain@v1.5.1
-        if: matrix.target != 'riscv32imc-esp-espidf'
         with:
           default: true
           buildtargets: 'all'
       - uses: Swatinem/rust-cache@v2
-      - run: cargo build --release --target ${{ matrix.target }} -Zbuild-std=std,panic_abort -Zbuild-std-features=panic_immediate_abort
+      - run: cargo build --release --features=std --target ${{ matrix.target }} -Zbuild-std=std,panic_abort -Zbuild-std-features=panic_immediate_abort
