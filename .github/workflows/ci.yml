@@ -121,10 +121,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: esp-rs/xtensa-toolchain@v1.5.1
+      - uses: esp-rs/xtensa-toolchain@v1.5.4
         with:
           default: true
-          buildtargets: 'all'
+          ldproxy: false
+          buildtargets: 'xtensa-esp32-none-elf,xtensa-esp32s2-none-elf,xtensa-esp32s3-none-elf'
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --target ${{ matrix.target }}
 
@@ -142,9 +143,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: esp-rs/xtensa-toolchain@v1.5.1
+      - uses: esp-rs/xtensa-toolchain@v1.5.4
         with:
           default: true
-          buildtargets: 'all'
+          ldproxy: true
+          buildtargets: 'riscv32imc-esp-espidf,riscv32imac-esp-espidf,xtensa-esp32-espidf,xtensa-esp32s2-espidf,xtensa-esp32s3-espidf'
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --features=std --target ${{ matrix.target }} -Zbuild-std=std,panic_abort -Zbuild-std-features=panic_immediate_abort
