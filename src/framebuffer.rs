@@ -1,11 +1,12 @@
+use alloc::{vec, vec::IntoIter, vec::Vec};
+
 use crate::colors::{TermColor, TermColorType};
-use alloc::vec::IntoIter;
+use embedded_graphics::Pixel;
 use embedded_graphics::draw_target::DrawTarget;
 use embedded_graphics::geometry::Dimensions;
 use embedded_graphics::pixelcolor::PixelColor;
 use embedded_graphics::primitives::Rectangle;
-use embedded_graphics::Pixel;
-use ratatui::style::Color;
+use ratatui_core::style::Color;
 
 pub(crate) struct HeapBuffer<C: PixelColor + Copy> {
     pub data: Vec<C>,
@@ -50,7 +51,7 @@ impl<C: PixelColor> Dimensions for HeapBuffer<C> {
 
 impl<C: PixelColor> DrawTarget for HeapBuffer<C> {
     type Color = C;
-    type Error = std::io::Error;
+    type Error = core::convert::Infallible;
 
     fn draw_iter<I>(&mut self, pixels: I) -> Result<(), Self::Error>
     where
@@ -71,8 +72,8 @@ mod tests {
     use rstest::{fixture, rstest};
 
     use embedded_graphics::mock_display::MockDisplay;
-    use embedded_graphics::mono_font::ascii::FONT_4X6;
     use embedded_graphics::mono_font::MonoTextStyle;
+    use embedded_graphics::mono_font::ascii::FONT_4X6;
     use embedded_graphics::pixelcolor::{Rgb888, RgbColor};
     use embedded_graphics::prelude::*;
     use embedded_graphics::text::Text;

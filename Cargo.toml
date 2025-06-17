@@ -1,32 +1,39 @@
 [package]
 name = "mousefood"
 description = "embedded-graphics backend for Ratatui"
-version = "0.1.0"
-edition = "2021"
+version = "0.2.1"
+edition = "2024"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 homepage = "https://github.com/j-g00da/mousefood"
 repository = "https://github.com/j-g00da/mousefood"
 keywords = ["embedded-graphics", "ratatui", "tui"]
 categories = ["embedded"]
-exclude=["/.idea/", "/.github/"]
+exclude=["/.github", "/assets"]
 
 [dependencies]
-ratatui = { version = "0.29", default-features = false, features = ["all-widgets", "underline-color"] }
+ratatui-core = { version = "0.1.0-alpha.5", features = ["underline-color"]}
+thiserror = { version = "2.0.12", default-features = false }
 embedded-graphics = "0.8.1"
 embedded-graphics-simulator = { version = "0.7.0", optional = true }
-embedded-graphics-unicodefonts = { version = "0.0.3", optional = true }
+embedded-graphics-unicodefonts = { version = "0.1.0", optional = true }
 weact-studio-epd = { version = "0.1.2", features = ["blocking"], optional = true }
 
 [dev-dependencies]
+ratatui = { version = "0.30.0-alpha.4", default-features = false }
 rstest = "0.25.0"
 paste = "1.0.15"
 
 [features]
 default = ["fonts"]
+std = ["thiserror/std", "ratatui-core/std"]
 simulator = ["dep:embedded-graphics-simulator"]
 fonts = ["dep:embedded-graphics-unicodefonts"]
 epd-weact = ["dep:weact-studio-epd"]
+
+[[example]]
+name = "simulator"
+required-features = ["simulator"]
 
 [lints.rust]
 missing_docs = "warn"

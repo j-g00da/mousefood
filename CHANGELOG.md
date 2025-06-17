@@ -2,6 +2,57 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.1] - 2025-04-23
+
+### 🚜 Refactor
+
+- *(examples)* Remove unnecessary `extern crate` from simulator example
+
+### 📚 Documentation
+
+- *(readme)* Fix simulator code snippet
+
+### ⚙️ Miscellaneous Tasks
+
+- *(examples)* Configure simulator example in Cargo.toml
+- Update list of excluded paths in Cargo.toml
+
+## [0.2.0] - 2025-04-15
+
+### 🚀 Features
+
+- *(no_std)* Use `core`/`alloc` instead of `std` where possible
+- *(config)* Add option to set a flush callback
+- WeAct Studio epaper modules support
+
+### 🚜 Refactor
+
+- Break down `lib.rs` into `backend.rs`, `colors.rs`, `default_font.rs` and `error.rs`
+- *(examples)* Change `text1` to `text`
+- Simplify color conversion
+- [**breaking**] Add config struct instead of multiple backend constructors
+- *(backend)* Simplify modifier parsing
+
+### 📚 Documentation
+
+- *(readme)* Add information about planned `no_std` support
+- *(examples)* Add missing docs in simulator example
+- *(assets)* Add epd-weact.jpg
+- *(readme)* Add EPD support section
+- *(readme)* Add link to ratatui `no_std` tracking issue
+
+### 🧪 Testing
+
+- *(colors)* Add color conversion tests
+- *(framebuffer)* Add framebuffer tests
+
+### ⚙️ Miscellaneous Tasks
+
+- Configure dependabot
+- *(lint)* Add `std` instead of `core`/`alloc` lints
+- Add test job to CI workflow
+- Ignore .idea
+
 ## [0.1.0] - 2025-03-29
 
 ### 🚀 Features

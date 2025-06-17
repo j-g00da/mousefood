@@ -2,7 +2,7 @@ use crate::macros::for_all_rgb_colors;
 use embedded_graphics::pixelcolor::{
     Bgr555, Bgr565, Bgr666, Bgr888, BinaryColor, Rgb555, Rgb565, Rgb666, Rgb888, RgbColor,
 };
-use ratatui::style::Color;
+use ratatui_core::style::Color;
 
 pub enum TermColorType {
     Foreground,
@@ -110,10 +110,10 @@ impl From<TermColor> for weact_studio_epd::TriColor {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use paste::paste;
-    use rstest::rstest;
     use Color::*;
     use TermColorType::*;
+    use paste::paste;
+    use rstest::rstest;
 
     macro_rules! into_eg_color {
         ($color_type:ident) => {
