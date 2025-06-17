@@ -125,7 +125,7 @@ jobs:
         with:
           default: true
           ldproxy: false
-          buildtargets: 'xtensa-esp32-none-elf,xtensa-esp32s2-none-elf,xtensa-esp32s3-none-elf'
+          buildtargets: 'esp32,esp32s2,esp32s3'
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --target ${{ matrix.target }}
 
@@ -147,6 +147,6 @@ jobs:
         with:
           default: true
           ldproxy: true
-          buildtargets: 'riscv32imc-esp-espidf,riscv32imac-esp-espidf,xtensa-esp32-espidf,xtensa-esp32s2-espidf,xtensa-esp32s3-espidf'
+          buildtargets: 'esp32,esp32s2,esp32s3,esp32c2,esp32c3,esp32c6,esp32h2'
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --features=std --target ${{ matrix.target }} -Zbuild-std=std,panic_abort -Zbuild-std-features=panic_immediate_abort
