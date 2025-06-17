@@ -1,8 +1,6 @@
 [package]
 name = "simulator"
-version = "0.0.0"
-workspace = "../../"
-edition = "2024"
+edition.workspace = true
 publish = false
 
 [dependencies]

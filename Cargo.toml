@@ -9,7 +9,7 @@ members = [
 name = "mousefood"
 description = "embedded-graphics backend for Ratatui"
 version = "0.2.1"
-edition = "2024"
+edition.workspace = true
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 homepage = "https://github.com/j-g00da/mousefood"
@@ -17,6 +17,9 @@ repository = "https://github.com/j-g00da/mousefood"
 keywords = ["embedded-graphics", "ratatui", "tui"]
 categories = ["embedded"]
 exclude=["/.github", "/assets"]
+
+[workspace.package]
+edition = "2024"
 
 [workspace.dependencies]
 ratatui = { version = "0.30.0-alpha.4", default-features = false }
