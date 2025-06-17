@@ -8,3 +8,4 @@ publish = false
 [dependencies]
 mousefood = { path = "../../" }
 embedded-graphics-simulator = "0.7"
+ratatui = { workspace = true }

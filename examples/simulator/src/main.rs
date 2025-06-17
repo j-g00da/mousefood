@@ -1,9 +1,11 @@
 use embedded_graphics_simulator::{OutputSettings, SimulatorDisplay, SimulatorEvent, Window};
 use mousefood::embedded_graphics::geometry;
+use mousefood::error::Error;
 use mousefood::prelude::*;
-use mousefood::ratatui::widgets::{Block, Paragraph, Wrap};
+use ratatui::widgets::{Block, Paragraph, Wrap};
+use ratatui::{Frame, Terminal, style::*};
 
-fn main() -> Result<(), std::io::Error> {
+fn main() -> Result<(), Error> {
     // Create window where the simulation will happen
     let mut simulator_window = Window::new(
         "mousefood simulator",
