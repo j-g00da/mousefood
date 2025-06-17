@@ -4,7 +4,7 @@ use mousefood::error::Error;
 use mousefood::prelude::*;
 use mousefood::simulator::SimulatorDisplay;
 use ratatui::widgets::{Block, Paragraph, Wrap};
-use ratatui::{style::*, Frame, Terminal};
+use ratatui::{Frame, Terminal, style::*};
 
 fn main() -> Result<(), Error> {
     let mut display = SimulatorDisplay::<Bgr565>::new(geometry::Size::new(128, 64));

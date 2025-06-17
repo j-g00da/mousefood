@@ -8,7 +8,6 @@ use embedded_graphics::pixelcolor::PixelColor;
 use embedded_graphics::primitives::Rectangle;
 use ratatui_core::style::Color;
 
-
 pub(crate) struct HeapBuffer<C: PixelColor + Copy> {
     pub data: Vec<C>,
     bounding_box: Rectangle,
