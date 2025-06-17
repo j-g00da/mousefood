@@ -13,7 +13,7 @@ If you use [nix](https://nixos.org) you can run `nix-shell -p SDL2` before runni
 To start this demo, simply run:
 
 ```shell
-cargo run
+cargo run -p simulator
 ```
 
 A window will open with the simulator running.

@@ -1,3 +1,5 @@
+#![doc = include_str!("../README.md")]
+
 use embedded_graphics_simulator::{OutputSettings, SimulatorDisplay, SimulatorEvent, Window};
 use mousefood::embedded_graphics::geometry;
 use mousefood::error::Error;
