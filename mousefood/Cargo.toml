@@ -1,0 +1,38 @@
+[package]
+name = "mousefood"
+description = "embedded-graphics backend for Ratatui"
+version = "0.2.1"
+edition.workspace = true
+license.workspace = true
+readme.workspace = true
+homepage.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+exclude.workspace = true
+
+[dependencies]
+ratatui-core = { version = "0.1.0-alpha.5", features = ["underline-color"] }
+thiserror = { version = "2.0.12", default-features = false }
+embedded-graphics = "0.8.1"
+embedded-graphics-unicodefonts = { version = "0.1.0", optional = true }
+weact-studio-epd = { version = "0.1.2", features = ["blocking"], optional = true }
+
+[dev-dependencies]
+ratatui = { workspace = true }
+rstest = "0.25.0"
+paste = "1.0.15"
+
+[features]
+default = ["fonts"]
+std = ["thiserror/std", "ratatui-core/std"]
+fonts = ["dep:embedded-graphics-unicodefonts"]
+epd-weact = ["dep:weact-studio-epd"]
+
+[lints.rust]
+missing_docs = "warn"
+
+[lints.clippy]
+std_instead_of_core = "warn"
+std_instead_of_alloc = "warn"
+alloc_instead_of_core = "warn"
