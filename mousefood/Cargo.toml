@@ -1,0 +1,39 @@
+[package]
+name = "mousefood"
+description = "embedded-graphics backend for Ratatui"
+version = "0.2.1"
+edition.workspace = true
+license.workspace = true
+readme.workspace = true
+homepage.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+exclude.workspace = true
+
+[dependencies]
+ratatui-core.workspace = true
+thiserror.workspace = true
+embedded-graphics.workspace = true
+embedded-graphics-simulator = { workspace = true, optional = true }
+embedded-graphics-unicodefonts = { workspace = true, optional = true }
+weact-studio-epd = { workspace = true, optional = true }
+
+[dev-dependencies]
+ratatui.workspace = true
+rstest.workspace = true
+paste.workspace = true
+
+[features]
+default = ["fonts"]
+std = ["thiserror/std", "ratatui-core/std"]
+simulator = ["dep:embedded-graphics-simulator"]
+fonts = ["dep:embedded-graphics-unicodefonts"]
+epd-weact = ["dep:weact-studio-epd"]
+
+[[example]]
+name = "simulator"
+required-features = ["simulator"]
+
+[lints]
+workspace = true
