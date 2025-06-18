@@ -69,8 +69,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     name: Run tests
-    strategy:
-      fail-fast: false
     steps:
       - uses: actions/checkout@v4
       - name: Install Rust
@@ -105,7 +103,6 @@ jobs:
         with:
           toolchain: ${{ matrix.toolchain }}
           target: ${{ matrix.target }}
-          components:
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --target ${{ matrix.target }}
 
@@ -126,7 +123,5 @@ jobs:
       - uses: esp-rs/xtensa-toolchain@v1.5.4
         with:
           default: true
-          ldproxy: true
-          buildtargets: 'esp32,esp32s2,esp32s3,esp32c2,esp32c3,esp32c6,esp32h2'
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --features=std --target ${{ matrix.target }} -Zbuild-std=std,panic_abort -Zbuild-std-features=panic_immediate_abort
