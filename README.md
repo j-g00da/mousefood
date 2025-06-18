@@ -176,6 +176,12 @@ Successfully tested on:
 
 Full API docs are available on [docs.rs](https://docs.rs/mousefood).
 
+## Contributing
+
+All contributions are welcome!
+
+Before opening a pull request, please read the [contributing guidelines](./CONTRIBUTING.md).
+
 ## License
 
 [![License MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square&color=8d97b3)](LICENSE-MIT)
