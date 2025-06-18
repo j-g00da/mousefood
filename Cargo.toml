@@ -4,6 +4,7 @@ members = ["mousefood"]
 
 [workspace.package]
 edition = "2024"
+rust-version = "1.85"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 homepage = "https://github.com/j-g00da/mousefood"

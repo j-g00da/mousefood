@@ -3,6 +3,7 @@ name = "mousefood"
 description = "embedded-graphics backend for Ratatui"
 version = "0.2.1"
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
 readme.workspace = true
 homepage.workspace = true
