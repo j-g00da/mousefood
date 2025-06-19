@@ -14,8 +14,5 @@ pub mod prelude;
 pub use backend::{EmbeddedBackend, EmbeddedBackendConfig};
 pub use embedded_graphics;
 
-#[cfg(feature = "simulator")]
-pub use embedded_graphics_simulator as simulator;
-
 #[cfg(feature = "fonts")]
 pub use embedded_graphics_unicodefonts as fonts;
