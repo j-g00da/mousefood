@@ -32,9 +32,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DavidAnson/markdownlint-cli2-action@v20
         with:
-          globs: |
-            **/*.md 
-            #CHANGELOG.md
+          globs: '**/*.md,#CHANGELOG.md'
+          separator: ','
 
   fmt:
     name: Run fmt
