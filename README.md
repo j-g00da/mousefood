@@ -5,7 +5,8 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/j-g00da/mousefood/ci.yml?style=flat-square&logo=github)](https://github.com/j-g00da/mousefood/blob/main/.github/workflows/ci.yml)
 [![Deps](https://deps.rs/crate/mousefood/latest/status.svg?style=flat-square)](https://deps.rs/crate/mousefood)
 
-**Mousefood** - a no-std [embedded-graphics](https://crates.io/crates/embedded-graphics) backend
+**Mousefood** - a no-std
+[embedded-graphics](https://crates.io/crates/embedded-graphics) backend
 for [Ratatui](https://crates.io/crates/ratatui)!
 
 <div align="center">
