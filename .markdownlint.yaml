@@ -3,3 +3,5 @@ no-inline-html:
     - div
     - img
 no-duplicate-heading: false
+MD013:
+  line_length: 100
