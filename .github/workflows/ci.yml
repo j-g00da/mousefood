@@ -47,7 +47,7 @@ jobs:
         with:
           components: rustfmt
       - name: Check formatting
-        run: cargo fmt -- --check
+        run: cargo fmt --check --all
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
 
@@ -65,6 +65,8 @@ jobs:
           components: clippy
       - name: Run clippy action
         uses: clechasseur/rs-clippy-check@v4
+        with:
+          args: --workspace
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
 
@@ -127,3 +129,4 @@ jobs:
           default: true
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --features=std --target ${{ matrix.target }} -Zbuild-std=std,panic_abort -Zbuild-std-features=panic_immediate_abort
+

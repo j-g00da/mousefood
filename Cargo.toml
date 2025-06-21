@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
-members = ["mousefood"]
+members = ["mousefood", "examples/*"]
+default-members = ["mousefood"]
 
 [workspace.package]
 edition = "2024"
