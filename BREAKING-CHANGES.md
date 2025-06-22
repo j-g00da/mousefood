@@ -5,6 +5,7 @@ This document lists all breaking changes along with tips to help you migrate smo
 ## Summary
 
 - [v0.3.0](#v030---unreleased) - unreleased
+  - Feature `simulator` is removed
   - Type of `EmbeddedBackendConfig::font_bold` is now `Option<MonoFont<'static>>`
   - `EmbeddedBackendConfig` now requires providing `font_italic`
   - `ratatui` is no longer re-exported 
@@ -20,6 +21,14 @@ This document lists all breaking changes along with tips to help you migrate smo
 - [v0.0.1](#v001---initial-release) - initial release
 
 ## v0.3.0 - unreleased
+
+### Feature `simulator` is removed ([#83])
+
+[#83]: https://github.com/j-g00da/mousefood/pull/83
+
+The feature `simulator` is removed to simplify code of the crate.
+
+An example crate was added in `examples/simulator` to restore functionaly of the feature.
 
 ### Type of `EmbeddedBackendConfig::font_bold` is now `Option<MonoFont<'static>>` ([#])
 
