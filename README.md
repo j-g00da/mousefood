@@ -87,38 +87,18 @@ let backend = EmbeddedBackend::new(&mut display, config);
 
 ### Simulator
 
-Mousefood can be run in a simulator
-(requires [SDL2](https://wiki.libsdl.org/SDL2/Installation) to be installed).
-The simulator mode can be enabled using the `simulator` feature and utilizes the
-[embedded-graphics-simulator](https://crates.io/crates/embedded-graphics-simulator)
-crate.
+Mousefood can be run in a simulator using
+[embedded-graphics-simulator](https://crates.io/crates/embedded-graphics-simulator) crate.
 
 Run simulator example:
 
 ```shell
 git clone https://github.com/j-g00da/mousefood.git
-cd mousefood
-cargo run --example=simulator --features=simulator
+cd mousefood/examples/simulator
+cargo run
 ```
 
-Exemplary setup using simulator:
-
-```rust
-use mousefood::prelude::*;
-use mousefood::embedded_graphics::geometry;
-use mousefood::simulator::SimulatorDisplay;
-
-fn main() -> Result<(), std::io::Error> {
-    let mut display = SimulatorDisplay::<Bgr565>::new(geometry::Size::new(128, 64));
-    let backend: EmbeddedBackend<SimulatorDisplay<_>, _> =
-        EmbeddedBackend::new(&mut display, EmbeddedBackendConfig::default());
-    let mut terminal = Terminal::new(backend)?;
-
-    loop {
-        terminal.draw(...)?;
-    }
-}
-```
+For more details, view the [simulator example](examples/simulator).
 
 ### EPD support
 
