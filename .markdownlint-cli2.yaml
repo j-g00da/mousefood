@@ -1,0 +1,6 @@
+config:
+  no-inline-html:
+    allowed_elements:
+      - div
+      - img
+  no-duplicate-heading: false
