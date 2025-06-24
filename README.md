@@ -90,6 +90,8 @@ let backend = EmbeddedBackend::new(&mut display, config);
 Mousefood can be run in a simulator using
 [embedded-graphics-simulator](https://crates.io/crates/embedded-graphics-simulator) crate.
 
+![Screenshot of a window running the simulator with a mousefood application](https://github.com/j-g00da/mousefood/blob/66d4010deed18f755cc3148a7f682f4119b7f664/assets/simulator.png?raw=true)
+
 Run simulator example:
 
 ```shell
