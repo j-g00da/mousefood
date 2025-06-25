@@ -7,15 +7,13 @@
 //! prevent screen tearing by allowing you to compose a complete frame in memory before
 //! sending it to the display.
 
+use crate::colors::TermColor;
 use alloc::{vec, vec::IntoIter, vec::Vec};
-
-use crate::colors::{TermColor, TermColorType};
 use embedded_graphics::Pixel;
 use embedded_graphics::draw_target::DrawTarget;
 use embedded_graphics::geometry::Dimensions;
 use embedded_graphics::pixelcolor::PixelColor;
 use embedded_graphics::primitives::Rectangle;
-use ratatui_core::style::Color;
 
 /// A heap-allocated framebuffer for storing pixels before rendering to a display.
 ///
@@ -57,7 +55,7 @@ impl<C: PixelColor + From<TermColor>> HeapBuffer<C> {
     pub fn new(bounding_box: Rectangle) -> HeapBuffer<C> {
         Self {
             data: vec![
-                TermColor(Color::Reset, TermColorType::Background).into();
+                crate::colors::TermColor::default().into();
                 (bounding_box.size.width * bounding_box.size.height) as usize
             ],
             bounding_box,
