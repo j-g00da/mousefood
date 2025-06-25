@@ -9,4 +9,8 @@ pub enum Error {
     /// Selected [`ClearType`] is not supported by Mousefood.
     #[error("ClearType::{0} is not supported by Mousefood")]
     ClearTypeUnsupported(alloc::string::String),
+
+    /// Flushing to the display failed.
+    #[error("flushing to DrawTarget failed: {0}")]
+    Flush(crate::buffered_display::FlushError),
 }

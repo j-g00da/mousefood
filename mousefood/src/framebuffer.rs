@@ -1,23 +1,29 @@
+use crate::colors::TermColor;
 use alloc::{vec, vec::IntoIter, vec::Vec};
-
-use crate::colors::{TermColor, TermColorType};
 use embedded_graphics::Pixel;
 use embedded_graphics::draw_target::DrawTarget;
 use embedded_graphics::geometry::Dimensions;
 use embedded_graphics::pixelcolor::PixelColor;
 use embedded_graphics::primitives::Rectangle;
-use ratatui_core::style::Color;
 
-pub(crate) struct HeapBuffer<C: PixelColor + Copy> {
-    pub data: Vec<C>,
+/// Framebuffer holding pixels, waiting to be drawn to the real display.
+///
+/// Useful if the real display does not already include a framebuffer.
+pub struct HeapBuffer<C: PixelColor + Copy> {
+    data: Vec<C>,
     bounding_box: Rectangle,
 }
 
 impl<C: PixelColor + From<TermColor>> HeapBuffer<C> {
+    /// Create a new framebuffer with defined dimensions
+    ///
+    /// # Arguments
+    ///
+    /// * `bounding_box` - The dimensions of the framebuffer
     pub fn new(bounding_box: Rectangle) -> HeapBuffer<C> {
         Self {
             data: vec![
-                TermColor(Color::Reset, TermColorType::Background).into();
+                crate::colors::TermColor::default().into();
                 (bounding_box.size.width * bounding_box.size.height) as usize
             ],
             bounding_box,
