@@ -213,7 +213,7 @@ where
             | ClearType::BeforeCursor
             | ClearType::CurrentLine
             | ClearType::UntilNewLine => Err(crate::error::Error::ClearTypeUnsupported(
-                alloc::format!("{:?}", clear_type),
+                alloc::format!("{clear_type:?}"),
             )),
         }
     }
