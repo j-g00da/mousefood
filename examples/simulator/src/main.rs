@@ -20,38 +20,59 @@
 //! A window will open with the simulator running.
 
 use embedded_graphics_simulator::{OutputSettings, SimulatorDisplay, SimulatorEvent, Window};
+use mousefood::buffered_display::{BufferedDisplay, DrawTarget, FlushError};
 use mousefood::embedded_graphics::geometry;
 use mousefood::error::Error;
 use mousefood::prelude::*;
 use ratatui::widgets::{Block, Paragraph, Wrap};
 use ratatui::{Frame, Terminal, style::*};
 
+type MousefoodColor = Bgr565;
+type MousefoodDisplay = SimulatorDisplay<MousefoodColor>;
+
+struct MousefoodSimulator {
+    window: Window,
+    display: SimulatorDisplay<MousefoodColor>,
+}
+
+impl BufferedDisplay<MousefoodDisplay, MousefoodColor> for MousefoodSimulator {
+    // Define where widgets will be drawn
+    fn draw_target(&mut self) -> &mut impl DrawTarget<Color = MousefoodColor> {
+        &mut self.display
+    }
+
+    // Define how to display drawn images
+    fn flush(&mut self) -> Result<(), FlushError> {
+        // Show next image on the window
+        self.window.update(&self.display);
+
+        // Stop showing images if window gets closed
+        if self.window.events().any(|e| e == SimulatorEvent::Quit) {
+            return Err(FlushError("simulator window closed".into()));
+        }
+
+        Ok(())
+    }
+}
+
 fn main() -> Result<(), Error> {
-    // Create window where the simulation will happen
-    let mut simulator_window = Window::new(
-        "mousefood simulator",
-        &OutputSettings {
-            scale: 4,
-            max_fps: 30,
-            ..Default::default()
-        },
-    );
+    let mut display = MousefoodSimulator {
+        // Create simulator window
+        window: Window::new(
+            "mousefood simulator",
+            &OutputSettings {
+                scale: 4,
+                max_fps: 30,
+                ..Default::default()
+            },
+        ),
 
-    // Define properties of the display which will be shown in the simulator window
-    let mut display = SimulatorDisplay::<Bgr565>::new(geometry::Size::new(128, 64));
-
-    let backend_config = EmbeddedBackendConfig {
-        // Define how to display newly rendered widgets to the simulator window
-        flush_callback: Box::new(move |display| {
-            simulator_window.update(display);
-            if simulator_window.events().any(|e| e == SimulatorEvent::Quit) {
-                panic!("simulator window closed");
-            }
-        }),
-        ..Default::default()
+        // Define display properties
+        display: MousefoodDisplay::new(geometry::Size::new(128, 64)),
     };
-    let backend: EmbeddedBackend<SimulatorDisplay<_>, _> =
-        EmbeddedBackend::new(&mut display, backend_config);
+
+    // Create embedded backend with default font configuration
+    let backend = EmbeddedBackend::new(&mut display, EmbeddedBackendConfig::default())?;
 
     // Start ratatui with our simulator backend
     let mut terminal = Terminal::new(backend)?;
@@ -63,10 +84,15 @@ fn main() -> Result<(), Error> {
 }
 
 fn draw(frame: &mut Frame) {
+    // Create a paragraph widget
     let text = "Ratatui on embedded devices!";
     let paragraph = Paragraph::new(text.dark_gray()).wrap(Wrap { trim: true });
+
+    // Place it inside a block with a title
     let bordered_block = Block::bordered()
         .border_style(Style::new().yellow())
         .title("Mousefood");
+
+    // Render everything to the display
     frame.render_widget(paragraph.block(bordered_block), frame.area());
 }
