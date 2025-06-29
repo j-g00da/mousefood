@@ -1,3 +1,12 @@
+//! # Framebuffer on the heap
+//!
+//! A framebuffer implementation for storing pixels in memory before rendering to a display.
+//!
+//! This module provides [`HeapBuffer`], a heap-allocated framebuffer that can be used
+//! with display drivers that don't provide their own internal framebuffer. This helps
+//! prevent screen tearing by allowing you to compose a complete frame in memory before
+//! sending it to the display.
+
 use alloc::{vec, vec::IntoIter, vec::Vec};
 
 use crate::colors::{TermColor, TermColorType};
@@ -8,12 +17,43 @@ use embedded_graphics::pixelcolor::PixelColor;
 use embedded_graphics::primitives::Rectangle;
 use ratatui_core::style::Color;
 
-pub(crate) struct HeapBuffer<C: PixelColor + Copy> {
-    pub data: Vec<C>,
+/// A heap-allocated framebuffer for storing pixels before rendering to a display.
+///
+/// `HeapBuffer` provides a memory-based framebuffer that can be used with display drivers
+/// that don't have their own internal framebuffer. This helps prevent screen tearing by
+/// allowing you to compose a complete frame in memory before sending it to the display.
+///
+/// The framebuffer is generic over any pixel color type that implements [`PixelColor`]
+/// and [`Copy`]. It stores pixels in a contiguous `Vec<C>` arranged in row-major order.
+///
+/// # Type Parameters
+///
+/// * `C` - The pixel color type. Must implement [`PixelColor`] and [`Copy`].
+pub struct HeapBuffer<C: PixelColor + Copy> {
+    data: Vec<C>,
     bounding_box: Rectangle,
 }
 
 impl<C: PixelColor + From<TermColor>> HeapBuffer<C> {
+    /// Creates a new framebuffer with the specified dimensions.
+    ///
+    /// The framebuffer is initialized with a background color derived from [`Color::Reset`].
+    ///
+    /// # Arguments
+    ///
+    /// * `bounding_box` - A [`Rectangle`] defining the position and size of the framebuffer.
+    ///   The framebuffer will have `width × height` pixels, where width and height
+    ///   are taken from the rectangle's size.
+    ///
+    /// # Returns
+    ///
+    /// A new [`HeapBuffer`] instance with the specified dimensions, initialized with
+    /// the default background color.
+    ///
+    /// # Memory Usage
+    ///
+    /// This method allocates `width × height × sizeof(C)` bytes of memory on the heap,
+    /// where `C` is the pixel color type.
     pub fn new(bounding_box: Rectangle) -> HeapBuffer<C> {
         Self {
             data: vec![

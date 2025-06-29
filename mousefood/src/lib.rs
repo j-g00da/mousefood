@@ -7,7 +7,7 @@ mod backend;
 mod colors;
 mod default_font;
 pub mod error;
-mod framebuffer;
+pub mod framebuffer;
 mod macros;
 pub mod prelude;
 
