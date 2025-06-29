@@ -1,3 +1,12 @@
+//! # Framebuffer
+//!
+//!
+//! A framebuffer can be used to contain new pixels of a new frame before being displayed.
+//!
+//! Some display driver write pixels directly on the display, which can cause some screen tearing.
+//!
+//! Mousefood can provide a framebuffer ready to be used.
+
 use alloc::{vec, vec::IntoIter, vec::Vec};
 
 use crate::colors::{TermColor, TermColorType};
@@ -8,12 +17,20 @@ use embedded_graphics::pixelcolor::PixelColor;
 use embedded_graphics::primitives::Rectangle;
 use ratatui_core::style::Color;
 
-pub(crate) struct HeapBuffer<C: PixelColor + Copy> {
-    pub data: Vec<C>,
+/// Framebuffer holding pixels, waiting to be drawn to the real display.
+///
+/// Created to be used in mousefood with a display driver not providing an internal framebuffer.
+pub struct HeapBuffer<C: PixelColor + Copy> {
+    data: Vec<C>,
     bounding_box: Rectangle,
 }
 
 impl<C: PixelColor + From<TermColor>> HeapBuffer<C> {
+    /// Create a new framebuffer with defined dimensions
+    ///
+    /// # Arguments
+    ///
+    /// * `bounding_box` - The dimensions of the framebuffer
     pub fn new(bounding_box: Rectangle) -> HeapBuffer<C> {
         Self {
             data: vec![
