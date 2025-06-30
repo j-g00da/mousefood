@@ -124,7 +124,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: esp-rs/xtensa-toolchain@v1.5.4
+      - uses: esp-rs/xtensa-toolchain@v1.6.0
         with:
           default: true
       - uses: Swatinem/rust-cache@v2
