@@ -15,7 +15,7 @@ categories = ["embedded"]
 exclude = ["/.github", "/assets"]
 
 [workspace.dependencies]
-ratatui-core = { version = "0.1.0-alpha.5", features = ["underline-color"] }
+ratatui-core = { version = "0.1.0-alpha.6", features = ["underline-color"] }
 thiserror = { version = "2.0.12", default-features = false }
 embedded-graphics = "0.8.1"
 embedded-graphics-simulator = "0.7.0"
