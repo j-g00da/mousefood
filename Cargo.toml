@@ -15,13 +15,13 @@ categories = ["embedded"]
 exclude = ["/.github", "/assets"]
 
 [workspace.dependencies]
-ratatui-core = { version = "0.1.0-alpha.5", features = ["underline-color"] }
+ratatui-core = { version = "0.1.0-alpha.6", features = ["underline-color"] }
 thiserror = { version = "2.0.12", default-features = false }
 embedded-graphics = "0.8.1"
 embedded-graphics-simulator = "0.7.0"
 embedded-graphics-unicodefonts = "0.1.0"
 weact-studio-epd = { version = "0.1.2", features = ["blocking"] }
-ratatui = { version = "0.30.0-alpha.4", default-features = false }
+ratatui = { version = "0.30.0-alpha.5", default-features = false }
 rstest = "0.25.0"
 paste = "1.0.15"
 
