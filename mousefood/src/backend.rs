@@ -12,6 +12,17 @@ use ratatui_core::backend::{Backend, ClearType};
 use ratatui_core::layout;
 use ratatui_core::style;
 
+/// Terminal alignment
+#[derive(Clone, Copy)]
+pub enum TerminalAlignment {
+    /// Alignment with the start of the terminal: left or top.
+    Start,
+    /// Best effort alignment with the center of the terminal.
+    Center,
+    /// Alignment with the end of the terminal: right or bottom.
+    End,
+}
+
 /// Embedded backend configuration.
 pub struct EmbeddedBackendConfig {
     /// Regular font.
@@ -20,6 +31,14 @@ pub struct EmbeddedBackendConfig {
     pub font_bold: Option<MonoFont<'static>>,
     /// Italic font.
     pub font_italic: Option<MonoFont<'static>>,
+
+    /// Determines how the view is vertically aligned when the display height
+    /// is not an exact multiple of the font height.
+    pub vertical_alignment: TerminalAlignment,
+
+    /// Determines how the view is horizontally aligned when the display width
+    /// is not an exact multiple of the font width.
+    pub horizontal_alignment: TerminalAlignment,
 }
 
 impl Default for EmbeddedBackendConfig {
@@ -28,6 +47,8 @@ impl Default for EmbeddedBackendConfig {
             font_regular: default_font::regular,
             font_bold: None,
             font_italic: None,
+            vertical_alignment: TerminalAlignment::Start,
+            horizontal_alignment: TerminalAlignment::Start,
         }
     }
 }
@@ -71,11 +92,29 @@ where
         font_regular: MonoFont<'static>,
         font_bold: Option<MonoFont<'static>>,
         font_italic: Option<MonoFont<'static>>,
+        vertical_alignment: TerminalAlignment,
+        horizontal_alignment: TerminalAlignment,
     ) -> Result<EmbeddedBackend<'display, B, D, C>> {
         let pixels = layout::Size {
             width: display.draw_target().bounding_box().size.width as u16,
             height: display.draw_target().bounding_box().size.height as u16,
         };
+
+        let extra_x = pixels.width % font_regular.character_size.width as u16;
+        let extra_y = pixels.height % font_regular.character_size.height as u16;
+
+        let off_x = match horizontal_alignment {
+            TerminalAlignment::Start => 0,
+            TerminalAlignment::Center => extra_x / 2, //best effort, might be 1/2 pixel off
+            TerminalAlignment::End => extra_x,
+        } as i32;
+        let off_y = match vertical_alignment {
+            TerminalAlignment::Start => 0,
+            TerminalAlignment::Center => extra_y / 2, //best effort, might be 1/2 pixel off
+            TerminalAlignment::End => extra_y,
+        } as i32;
+
+        let char_offset = geometry::Point::new(off_x, off_y);
 
         let mut backend = Self {
             display,
@@ -83,7 +122,7 @@ where
             font_regular,
             font_bold,
             font_italic,
-            char_offset: geometry::Point::new(0, font_regular.character_size.height as i32),
+            char_offset,
             columns_rows: layout::Size {
                 height: pixels.height / font_regular.character_size.height as u16,
                 width: pixels.width / font_regular.character_size.width as u16,
@@ -109,6 +148,8 @@ where
             config.font_regular,
             config.font_bold,
             config.font_italic,
+            config.vertical_alignment,
+            config.horizontal_alignment,
         )
     }
 }
@@ -165,10 +206,11 @@ where
                 );
             }
 
-            Text::new(
+            Text::with_baseline(
                 cell.symbol(),
                 position + self.char_offset,
                 style_builder.build(),
+                embedded_graphics::text::Baseline::Top,
             )
             .draw(self.display.draw_target())
             .map_err(|_| crate::error::Error::DrawError)?;
