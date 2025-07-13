@@ -130,21 +130,10 @@ in embedded graphics contexts.
 **Migration guide:**
 
 ```diff
-- fn handle_backend_error(err: std::io::Error) {
-+ fn handle_backend_error(err: mousefood::error::Error) {
-    // Handle the error
+- use std::io::Error
++ use mousefood::error::Error
 }
 ```
-
-```diff
-- use std::io::Error as BackendError;
-+ use mousefood::error::Error as BackendError;
-```
-
-The new error type provides more specific error variants:
-
-- `Error::DrawError` - Drawing to the display failed
-- `Error::ClearTypeUnsupported` - Selected ClearType is not supported
 
 ### The MSRV is now 1.85.0 ([#65])
 
