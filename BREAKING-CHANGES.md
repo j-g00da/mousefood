@@ -132,7 +132,6 @@ in embedded graphics contexts.
 ```diff
 - use std::io::Error
 + use mousefood::error::Error
-}
 ```
 
 ### The MSRV is now 1.85.0 ([#65])
