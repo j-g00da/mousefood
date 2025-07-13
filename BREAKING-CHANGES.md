@@ -154,7 +154,7 @@ rustc --version  # should show 1.85.0 or higher
 
 ### `EmbeddedBackend::with_font` constructor removed ([#48])
 
-[#48]: https://github.com/j-g00da/mousefood/pull/75
+[#48]: https://github.com/j-g00da/mousefood/pull/48
 
 The `with_font` constructor was removed in favor of the more flexible config-based approach.
 
