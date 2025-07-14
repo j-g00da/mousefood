@@ -11,7 +11,7 @@ pub mod framebuffer;
 mod macros;
 pub mod prelude;
 
-pub use backend::{EmbeddedBackend, EmbeddedBackendConfig};
+pub use backend::{EmbeddedBackend, EmbeddedBackendConfig, TerminalAlignment};
 pub use embedded_graphics;
 
 #[cfg(feature = "fonts")]
