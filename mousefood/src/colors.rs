@@ -11,6 +11,12 @@ pub enum TermColorType {
 
 pub struct TermColor(pub Color, pub TermColorType);
 
+impl Default for TermColor {
+    fn default() -> Self {
+        Self(Color::Reset, TermColorType::Background)
+    }
+}
+
 macro_rules! impl_from_term_color {
     (
         $color_type:ident

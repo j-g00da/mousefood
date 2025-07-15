@@ -4,6 +4,7 @@
 extern crate alloc;
 
 mod backend;
+pub mod buffered_display;
 mod colors;
 mod default_font;
 pub mod error;
