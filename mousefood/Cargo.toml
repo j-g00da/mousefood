@@ -25,10 +25,11 @@ rstest.workspace = true
 paste.workspace = true
 
 [features]
-default = ["fonts"]
+default = ["fonts", "framebuffer"]
 std = ["thiserror/std", "ratatui-core/std"]
 fonts = ["dep:embedded-graphics-unicodefonts"]
 epd-weact = ["dep:weact-studio-epd"]
+framebuffer = []
 
 [lints]
 workspace = true

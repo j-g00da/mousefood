@@ -3,7 +3,6 @@ use core::marker::PhantomData;
 
 use crate::colors::*;
 use crate::default_font;
-use crate::framebuffer;
 use embedded_graphics::Drawable;
 use embedded_graphics::draw_target::DrawTarget;
 use embedded_graphics::geometry::{self, Dimensions};
@@ -86,7 +85,8 @@ where
 
     flush_callback: Box<dyn FnMut(&mut D)>,
 
-    buffer: framebuffer::HeapBuffer<C>,
+    #[cfg(feature = "framebuffer")]
+    buffer: crate::framebuffer::HeapBuffer<C>,
 
     font_regular: MonoFont<'static>,
     font_bold: Option<MonoFont<'static>>,
@@ -134,7 +134,8 @@ where
         let char_offset = geometry::Point::new(off_x, off_y);
 
         Self {
-            buffer: framebuffer::HeapBuffer::new(display.bounding_box()),
+            #[cfg(feature = "framebuffer")]
+            buffer: crate::framebuffer::HeapBuffer::new(display.bounding_box()),
             display,
             display_type: PhantomData,
             flush_callback: Box::new(flush_callback),
@@ -224,7 +225,12 @@ where
                 style_builder.build(),
                 embedded_graphics::text::Baseline::Top,
             )
-            .draw(&mut self.buffer)
+            .draw(
+                #[cfg(feature = "framebuffer")]
+                &mut self.buffer,
+                #[cfg(not(feature = "framebuffer"))]
+                self.display,
+            )
             .map_err(|_| crate::error::Error::DrawError)?;
         }
         Ok(())
@@ -253,10 +259,16 @@ where
         Ok(())
     }
 
+    #[cfg(feature = "framebuffer")]
     fn clear(&mut self) -> Result<()> {
         self.buffer
             .clear(TermColor(style::Color::Reset, TermColorType::Background).into())
             .map_err(|_| crate::error::Error::DrawError)
+    }
+
+    #[cfg(not(feature = "framebuffer"))]
+    fn clear(&mut self) -> Result<()> {
+        Ok(())
     }
 
     fn clear_region(&mut self, clear_type: ClearType) -> Result<()> {
@@ -283,6 +295,7 @@ where
     }
 
     fn flush(&mut self) -> Result<()> {
+        #[cfg(feature = "framebuffer")]
         self.display
             .fill_contiguous(&self.display.bounding_box(), &self.buffer)
             .map_err(|_| crate::error::Error::DrawError)?;
