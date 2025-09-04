@@ -166,6 +166,11 @@ where
             config.horizontal_alignment,
         )
     }
+
+    /// Borrow the display
+    pub fn display_mut(&mut self) -> &mut D {
+        &mut self.display
+    }
 }
 
 type Result<T, E = crate::error::Error> = core::result::Result<T, E>;
