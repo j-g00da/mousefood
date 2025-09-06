@@ -56,7 +56,7 @@ where
     fn default() -> Self {
         Self {
             flush_callback: Box::new(|_| {}),
-            font_regular: default_font::regular,
+            font_regular: default_font::get_regular(),
             font_bold: None,
             font_italic: None,
             vertical_alignment: TerminalAlignment::Start,

@@ -209,9 +209,9 @@ dependencies = [
 
 [[package]]
 name = "embedded-graphics-unicodefonts"
-version = "0.1.0"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ef96f7e6453093b9ffc738fb025f1a14c31f7f67a5d587db99beb23ab8b433a"
+checksum = "a82ef1580d1bff3e89bd3e68069acb24910b66001aaab1738ce9de8d03d2ab1e"
 dependencies = [
  "embedded-graphics",
 ]

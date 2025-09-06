@@ -19,7 +19,7 @@ ratatui-core = { version = "0.1.0-alpha.6", features = ["underline-color"] }
 thiserror = { version = "2.0.16", default-features = false }
 embedded-graphics = "0.8.1"
 embedded-graphics-simulator = "0.7.0"
-embedded-graphics-unicodefonts = "0.1.0"
+embedded-graphics-unicodefonts = "0.2.0"
 weact-studio-epd = { version = "0.1.2", features = ["blocking"] }
 ratatui = { version = "0.30.0-alpha.5", default-features = false }
 rstest = "0.25.0"
