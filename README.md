@@ -153,6 +153,16 @@ Successfully tested on:
 
 Full API docs are available on [docs.rs](https://docs.rs/mousefood).
 
+## Built with Mousefood
+
+Here are some projects built using Mousefood:
+
+- [Tuitar](https://github.com/orhun/tuitar) - A portable guitar training tool.
+- [Mnyaoo32](https://github.com/intuis/mnyaoo32) - An eccentric way to consume IRC messages using ESP32.
+- [Phone-OS](https://github.com/Julien-cpsn/Phone-OS) - A modern phone OS for ESP32 CYD.
+
+Send a pull request to add your project here!
+
 ## License
 
 [![License MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square&color=8d97b3)](LICENSE-MIT)
