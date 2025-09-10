@@ -308,3 +308,93 @@ where
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use {
+        super::*,
+        embedded_graphics::{
+            mock_display::MockDisplay,
+            mono_font::{MonoTextStyle, ascii::FONT_4X6},
+            pixelcolor::{Rgb888, RgbColor},
+            prelude::*,
+            text::{Alignment, LineHeight, Text, TextStyleBuilder},
+        },
+        ratatui::Terminal,
+        rstest::{fixture, rstest},
+    };
+
+    #[fixture]
+    fn display0() -> MockDisplay<Rgb888> {
+        let mut d = MockDisplay::new();
+        d.set_allow_overdraw(true);
+        d
+    }
+
+    #[fixture]
+    fn display1() -> MockDisplay<Rgb888> {
+        display0()
+    }
+
+    #[fixture]
+    fn test_text<'a>() -> (Text<'a, MonoTextStyle<'a, Rgb888>>, &'static str) {
+        (
+            {
+                let text_style = TextStyleBuilder::new()
+                    .alignment(Alignment::Left)
+                    .line_height(LineHeight::Percent(100))
+                    .baseline(embedded_graphics::text::Baseline::Top)
+                    .build();
+
+                Text::with_text_style(
+                    "Test",
+                    Point::new(0, 0),
+                    MonoTextStyle::new(&FONT_4X6, Rgb888::WHITE),
+                    text_style,
+                )
+            },
+            "Test",
+        )
+    }
+
+    #[rstest]
+    fn renders_direct_as_expected(
+        mut display0: MockDisplay<Rgb888>,
+        mut display1: MockDisplay<Rgb888>,
+        #[from(test_text)] (text, s): (Text<MonoTextStyle<Rgb888>>, &str),
+    ) {
+        let config = || EmbeddedBackendConfig {
+            font_regular: FONT_4X6,
+            font_bold: None,
+            vertical_alignment: TerminalAlignment::Start,
+            horizontal_alignment: TerminalAlignment::Start,
+            ..Default::default()
+        };
+
+        //render text directly to the display retrieved from the backend
+        {
+            let backend = EmbeddedBackend::new(&mut display0, config());
+            let mut terminal = Terminal::new(backend).expect("to create terminal");
+            terminal.draw(|_frame| {}).expect("to draw");
+
+            let display = terminal.backend_mut().display_mut();
+            text.draw(display).unwrap();
+        }
+
+        //render text via ratatui
+        {
+            let backend = EmbeddedBackend::new(&mut display1, config());
+            let mut terminal = Terminal::new(backend).expect("to create terminal");
+
+            terminal
+                .draw(|frame| {
+                    use ratatui::text::Line;
+                    let content = Line::from(s).left_aligned();
+                    frame.render_widget(content, frame.area());
+                })
+                .expect("to draw");
+        }
+
+        display0.assert_eq(&display1);
+    }
+}
