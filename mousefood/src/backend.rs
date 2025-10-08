@@ -168,6 +168,11 @@ where
     }
 
     /// Borrow the display
+    pub fn display(&self) -> &D {
+        &self.display
+    }
+
+    /// Mutably borrow the display
     pub fn display_mut(&mut self) -> &mut D {
         &mut self.display
     }
@@ -336,32 +341,10 @@ mod tests {
         display0()
     }
 
-    #[fixture]
-    fn test_text<'a>() -> (Text<'a, MonoTextStyle<'a, Rgb888>>, &'static str) {
-        (
-            {
-                let text_style = TextStyleBuilder::new()
-                    .alignment(Alignment::Left)
-                    .line_height(LineHeight::Percent(100))
-                    .baseline(embedded_graphics::text::Baseline::Top)
-                    .build();
-
-                Text::with_text_style(
-                    "Test",
-                    Point::new(0, 0),
-                    MonoTextStyle::new(&FONT_4X6, Rgb888::WHITE),
-                    text_style,
-                )
-            },
-            "Test",
-        )
-    }
-
     #[rstest]
     fn renders_direct_as_expected(
         mut display0: MockDisplay<Rgb888>,
         mut display1: MockDisplay<Rgb888>,
-        #[from(test_text)] (text, s): (Text<MonoTextStyle<Rgb888>>, &str),
     ) {
         let config = || EmbeddedBackendConfig {
             font_regular: FONT_4X6,
@@ -371,17 +354,38 @@ mod tests {
             ..Default::default()
         };
 
-        //render text directly to the display retrieved from the backend
+        //render "T" via ratatui and then " est" directly to the display retrieved from the backend
         {
             let backend = EmbeddedBackend::new(&mut display0, config());
             let mut terminal = Terminal::new(backend).expect("to create terminal");
-            terminal.draw(|_frame| {}).expect("to draw");
+            terminal
+                .draw(|frame| {
+                    use ratatui::text::Line;
+                    let content = Line::from("T").left_aligned();
+                    frame.render_widget(content, frame.area());
+                })
+                .expect("to draw");
 
             let display = terminal.backend_mut().display_mut();
+
+            let text = {
+                let text_style = TextStyleBuilder::new()
+                    .alignment(Alignment::Left)
+                    .line_height(LineHeight::Percent(100))
+                    .baseline(embedded_graphics::text::Baseline::Top)
+                    .build();
+
+                Text::with_text_style(
+                    " est",
+                    Point::new(0, 0),
+                    MonoTextStyle::new(&FONT_4X6, Rgb888::WHITE),
+                    text_style,
+                )
+            };
             text.draw(display).unwrap();
         }
 
-        //render text via ratatui
+        //render "Test" via ratatui
         {
             let backend = EmbeddedBackend::new(&mut display1, config());
             let mut terminal = Terminal::new(backend).expect("to create terminal");
@@ -389,7 +393,7 @@ mod tests {
             terminal
                 .draw(|frame| {
                     use ratatui::text::Line;
-                    let content = Line::from(s).left_aligned();
+                    let content = Line::from("Test").left_aligned();
                     frame.render_widget(content, frame.area());
                 })
                 .expect("to draw");
