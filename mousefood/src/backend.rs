@@ -169,12 +169,12 @@ where
 
     /// Borrow the display
     pub fn display(&self) -> &D {
-        &self.display
+        self.display
     }
 
     /// Mutably borrow the display
     pub fn display_mut(&mut self) -> &mut D {
-        &mut self.display
+        self.display
     }
 }
 
