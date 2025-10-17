@@ -104,6 +104,8 @@ For more details, view the [simulator example](examples/simulator).
 
 ### EPD support
 
+#### WeAct Studio
+
 <div align="center">
 
 ![WeAct epd demo](https://github.com/j-g00da/mousefood/blob/fa70cdd46567a51895caf10c44fff4104602e880/assets/epd-weact.jpg?raw=true)
@@ -134,7 +136,31 @@ let config = EmbeddedBackendConfig {
 let backend = EmbeddedBackend::new(&mut display, config);
 ```
 
-Support for `epd_waveshare` driver is planned in the future.
+#### Waveshare
+
+Support for EPD (e-ink displays) produced by Waveshare Electronics
+(`epd-waveshare` driver) can be enabled using `epd-waveshare` feature.
+This driver requires some additional configuration:
+
+```rust
+use mousefood::prelude::*;
+use epd_waveshare::{epd2in9_v2::*, prelude::*};
+
+// Configure SPI
+// (...)
+
+let mut epd = Epd2in9::new(&mut spi_device, busy, dc, rst, delay, None);
+let mut display = Display2in9::default();
+
+let config = EmbeddedBackendConfig {
+        flush_callback: Box::new(move |d| {
+            epd.update_and_display_frame(&mut spi_device, d.buffer(), delay)
+        }),
+        ..Default::default()
+    };
+
+let backend = EmbeddedBackend::new(&mut display, config);
+```
 
 ## Performance and hardware support
 
