@@ -153,11 +153,11 @@ let mut epd = Epd2in9::new(&mut spi_device, busy, dc, rst, delay, None);
 let mut display = Display2in9::default();
 
 let config = EmbeddedBackendConfig {
-        flush_callback: Box::new(move |d| {
-            epd.update_and_display_frame(&mut spi_device, d.buffer(), delay)
-        }),
-        ..Default::default()
-    };
+    flush_callback: Box::new(move |d| {
+        epd.update_and_display_frame(&mut spi_device, d.buffer(), delay)
+    }),
+    ..Default::default()
+};
 
 let backend = EmbeddedBackend::new(&mut display, config);
 ```
