@@ -52,23 +52,49 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
   clippy:
-    name: Run clippy
+    name: Run clippy (${{ matrix.project.name }})
     runs-on: ubuntu-latest
     permissions:
       checks: write
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          # Core no_std workspace (default host build)
+          - name: workspace
+            dir: .
+            target: ""
+            setup_xtensa: false
+          # ESP-IDF demo using Xtensa toolchain
+          - name: esp32-std-demo
+            dir: examples/mousefood-esp32-std-demo
+            target: xtensa-esp32-espidf
+            setup_xtensa: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Rust
-        uses: esp-rs/xtensa-toolchain@v1.5
+      - name: Setup Rust (stable)
+        if: ${{ matrix.project.setup_xtensa == false }}
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - name: Setup Xtensa toolchain (ESP-IDF)
+        if: ${{ matrix.project.setup_xtensa == true }}
+        uses: esp-rs/xtensa-toolchain@v1.6.0
         with:
           default: true
           buildtargets: esp32
           ldproxy: true
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
-      - name: Run clippy (workspace too)
-        run: cargo clippy -- -D warnings
+      - name: Run Clippy
+        working-directory: ${{ matrix.project.dir }}
+        run: |
+          if [ -n "${{ matrix.project.target }}" ]; then
+            cargo clippy --target "${{ matrix.project.target }}" -- -D warnings
+          else
+            cargo clippy -- -D warnings
+          fi
 
   test:
     runs-on: ubuntu-latest
