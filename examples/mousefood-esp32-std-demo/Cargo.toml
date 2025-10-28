@@ -9,12 +9,14 @@ rust-version = "1.85.0"
 name = "mousefood-esp32-std-demo"
 harness = false # do not use the built in cargo test harness -> resolve rust-analyzer errors
 
-[profile.release]
-opt-level = 3
-
-[profile.dev]
-debug = true    # Symbols are nice and they don't increase the size on Flash
-opt-level = 3
+# Commented out due to workspace profiles being used
+# Feel free to uncomment and adjust if you have copied this outside of a workspace
+# [profile.release]
+# opt-level = 3
+#
+# [profile.dev]
+# debug = true    # Symbols are nice and they don't increase the size on Flash
+# opt-level = 3
 
 [features]
 default = []
