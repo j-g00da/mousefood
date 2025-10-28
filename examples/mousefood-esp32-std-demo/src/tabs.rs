@@ -108,7 +108,7 @@ impl<B: Backend> Default for TabsApp<B> {
     }
 }
 
-fn vertical_barchart(temperatures: &[u8]) -> BarChart {
+fn vertical_barchart(temperatures: &[u8]) -> BarChart<'_> {
     let bars: Vec<Bar> = temperatures
         .iter()
         .enumerate()
@@ -121,7 +121,7 @@ fn vertical_barchart(temperatures: &[u8]) -> BarChart {
         .bar_width(5)
 }
 
-fn vertical_bar(hour: usize, temperature: &u8) -> Bar {
+fn vertical_bar(hour: usize, temperature: &u8) -> Bar<'_> {
     Bar::default()
         .value(u64::from(*temperature))
         .label(Line::from(format!("{hour:>02}:00")))
