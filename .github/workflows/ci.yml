@@ -59,16 +59,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install Rust stable
-        uses: dtolnay/rust-toolchain@stable
+      - name: Setup Rust
+        uses: esp-rs/xtensa-toolchain@v1.5
         with:
-          components: clippy
-      - name: Run clippy action
-        uses: clechasseur/rs-clippy-check@v4
-        with:
-          args: --workspace
+          default: true
+          buildtargets: esp32
+          ldproxy: true
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
+      - name: Run clippy (workspace too)
+        run: cargo clippy -- -D warnings
 
   test:
     runs-on: ubuntu-latest
