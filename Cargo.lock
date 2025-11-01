@@ -657,15 +657,6 @@ dependencies = [
 
 [[package]]
 name = "embedded-graphics-unicodefonts"
-version = "0.0.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4ae29a3546b748029042d5e1311cbf45cde05dd96ed4b762762e50fcad6f4746"
-dependencies = [
- "embedded-graphics",
-]
-
-[[package]]
-name = "embedded-graphics-unicodefonts"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a82ef1580d1bff3e89bd3e68069acb24910b66001aaab1738ce9de8d03d2ab1e"
@@ -1405,7 +1396,7 @@ name = "mousefood"
 version = "0.2.1"
 dependencies = [
  "embedded-graphics",
- "embedded-graphics-unicodefonts 0.2.0",
+ "embedded-graphics-unicodefonts",
  "paste",
  "ratatui 0.30.0-alpha.5",
  "ratatui-core",
@@ -1415,24 +1406,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "mousefood"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "929b22c14550c879ace30a10bf41b2896996d6704aaf867bfab905f5d85e3cc4"
-dependencies = [
- "embedded-graphics",
- "embedded-graphics-unicodefonts 0.0.3",
- "ratatui 0.29.0",
-]
-
-[[package]]
 name = "mousefood-esp32-std-demo"
 version = "0.1.0"
 dependencies = [
  "embuild",
  "esp-idf-svc",
  "mipidsi",
- "mousefood 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "mousefood",
  "rand",
  "time",
  "tui-big-text",
@@ -1519,15 +1499,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.100",
-]
-
-[[package]]
-name = "num_threads"
-version = "0.1.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5c7398b9c8b70908f6371f47ed36737907c87c52af34c268fed0bf0ceb92ead9"
-dependencies = [
- "libc",
 ]
 
 [[package]]
@@ -1750,7 +1721,6 @@ dependencies = [
  "lru 0.12.5",
  "paste",
  "strum 0.26.3",
- "time",
  "unicode-segmentation",
  "unicode-truncate 1.1.0",
  "unicode-width 0.2.0",
@@ -2060,7 +2030,7 @@ name = "simulator"
 version = "0.0.0"
 dependencies = [
  "embedded-graphics-simulator",
- "mousefood 0.2.1",
+ "mousefood",
  "ratatui 0.30.0-alpha.5",
 ]
 
@@ -2267,9 +2237,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "91e7d9e3bb61134e77bde20dd4825b97c010155709965fedf0f49bb138e52a9d"
 dependencies = [
  "deranged",
- "libc",
  "num-conv",
- "num_threads",
  "powerfmt",
  "serde",
  "time-core",
