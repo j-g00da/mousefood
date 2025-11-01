@@ -2,11 +2,11 @@ use crate::lorem::LOREM_IPSUM;
 use esp_idf_svc::hal::delay;
 use esp_idf_svc::hal::gpio::{Gpio0, Input, PinDriver};
 use esp_idf_svc::hal::task::notification::Notification;
-use mousefood::prelude::*;
-use mousefood::ratatui::style::Style;
-use mousefood::ratatui::widgets::calendar::{CalendarEventStore, Monthly};
-use mousefood::ratatui::widgets::{Bar, BarChart, BarGroup, Block, Padding, Paragraph, Tabs, Wrap};
 use rand::{Rng, rng};
+use ratatui::prelude::*;
+use ratatui::style::Style;
+use ratatui::widgets::calendar::{CalendarEventStore, Monthly};
+use ratatui::widgets::{Bar, BarChart, BarGroup, Block, Padding, Paragraph, Tabs, Wrap};
 use std::marker::PhantomData;
 use time::{Date, Month};
 

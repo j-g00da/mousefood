@@ -2,8 +2,8 @@ use crate::helpers::center;
 use esp_idf_svc::hal::delay;
 use esp_idf_svc::hal::gpio::{Gpio0, Input, PinDriver};
 use esp_idf_svc::hal::task::notification::Notification;
-use mousefood::prelude::*;
-use mousefood::ratatui::widgets::{Block, Padding, RatatuiLogo};
+use ratatui::prelude::*;
+use ratatui::widgets::{Block, Padding, RatatuiLogo};
 use std::io::Result;
 use std::marker::PhantomData;
 

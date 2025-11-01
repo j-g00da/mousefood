@@ -3,8 +3,8 @@ use crate::lorem::LOREM_IPSUM;
 use esp_idf_svc::hal::delay;
 use esp_idf_svc::hal::gpio::{Gpio0, Input, PinDriver};
 use esp_idf_svc::hal::task::notification::Notification;
-use mousefood::prelude::*;
-use mousefood::ratatui::widgets::{Axis, Block, Chart, Clear, Dataset, Paragraph, Wrap};
+use ratatui::prelude::*;
+use ratatui::widgets::{Axis, Block, Chart, Clear, Dataset, Paragraph, Wrap};
 use std::io::Result;
 use std::marker::PhantomData;
 

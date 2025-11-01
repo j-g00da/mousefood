@@ -1,9 +1,9 @@
 use esp_idf_svc::hal::delay;
 use esp_idf_svc::hal::gpio::{Gpio0, Input, PinDriver};
 use esp_idf_svc::hal::task::notification::Notification;
-use mousefood::prelude::{Backend, Color, Terminal};
-use mousefood::ratatui::widgets::BorderType;
-use mousefood::ratatui::{
+use ratatui::prelude::{Backend, Color, Terminal};
+use ratatui::widgets::BorderType;
+use ratatui::{
     buffer::Buffer,
     layout::{Constraint, Layout, Rect},
     style::Stylize,

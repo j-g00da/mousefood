@@ -26,6 +26,7 @@ use mipidsi::interface::SpiInterface;
 use mipidsi::models::ST7789;
 use mipidsi::options::{ColorInversion, Orientation, Rotation};
 use mousefood::prelude::*;
+use ratatui::Terminal;
 use std::num::NonZeroU32;
 use std::thread;
 use std::time::Duration;
