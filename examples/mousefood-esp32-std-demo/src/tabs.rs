@@ -7,6 +7,7 @@ use ratatui::prelude::*;
 use ratatui::style::Style;
 use ratatui::widgets::calendar::{CalendarEventStore, Monthly};
 use ratatui::widgets::{Bar, BarChart, BarGroup, Block, Padding, Paragraph, Tabs, Wrap};
+use std::error::Error;
 use std::marker::PhantomData;
 use time::{Date, Month};
 
@@ -31,7 +32,10 @@ impl<B: Backend> TabsApp<B> {
         terminal: &mut Terminal<B>,
         notification: &mut Notification,
         button: &mut PinDriver<Gpio0, Input>,
-    ) -> std::io::Result<()> {
+    ) -> Result<(), Box<dyn Error>>
+    where
+        B::Error: 'static,
+    {
         button.enable_interrupt().unwrap();
         loop {
             if notification.wait(delay::NON_BLOCK).is_some() {

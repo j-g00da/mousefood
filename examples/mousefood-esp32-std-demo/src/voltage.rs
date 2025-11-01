@@ -5,7 +5,7 @@ use esp_idf_svc::hal::gpio::{Gpio0, Gpio34, Input, PinDriver};
 use esp_idf_svc::hal::task::notification::Notification;
 use ratatui::prelude::*;
 use ratatui::widgets::{Block, BorderType, Padding};
-use std::io::Result;
+use std::error::Error;
 use std::marker::PhantomData;
 use tui_big_text::{BigText, PixelSize};
 
@@ -27,7 +27,10 @@ impl<B: Backend> VoltageApp<B> {
         button: &mut PinDriver<Gpio0, Input>,
         adc_driver: &AdcDriver<'a, ADC1>,
         adc_channel: &mut AdcChannelDriver<'a, Gpio34, &AdcDriver<'a, ADC1>>,
-    ) -> Result<()> {
+    ) -> Result<(), Box<dyn Error>>
+    where
+        B::Error: 'static,
+    {
         button.enable_interrupt().unwrap();
         loop {
             if notification.wait(delay::NON_BLOCK).is_some() {

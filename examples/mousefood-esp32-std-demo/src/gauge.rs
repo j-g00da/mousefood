@@ -10,6 +10,7 @@ use ratatui::{
     text::Line,
     widgets::{Block, Gauge, Padding, Widget},
 };
+use std::error::Error;
 use std::marker::PhantomData;
 
 #[derive(Debug, Clone, Copy)]
@@ -32,7 +33,10 @@ impl<B: Backend> GaugeApp<B> {
         terminal: &mut Terminal<B>,
         notification: &mut Notification,
         button: &mut PinDriver<Gpio0, Input>,
-    ) -> std::io::Result<()> {
+    ) -> Result<(), Box<dyn Error>>
+    where
+        B::Error: 'static,
+    {
         button.enable_interrupt().unwrap();
         loop {
             if notification.wait(delay::NON_BLOCK).is_some() {

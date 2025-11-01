@@ -5,7 +5,7 @@ use esp_idf_svc::hal::gpio::{Gpio0, Input, PinDriver};
 use esp_idf_svc::hal::task::notification::Notification;
 use ratatui::prelude::*;
 use ratatui::widgets::{Axis, Block, Chart, Clear, Dataset, Paragraph, Wrap};
-use std::io::Result;
+use std::error::Error;
 use std::marker::PhantomData;
 
 pub struct ChartApp<B: Backend> {
@@ -69,7 +69,10 @@ impl<B: Backend> ChartApp<B> {
         terminal: &mut Terminal<B>,
         notification: &mut Notification,
         button: &mut PinDriver<Gpio0, Input>,
-    ) -> Result<()> {
+    ) -> Result<(), Box<dyn Error>>
+    where
+        B::Error: 'static,
+    {
         button.enable_interrupt().unwrap();
         loop {
             if notification.wait(delay::NON_BLOCK).is_some() {
