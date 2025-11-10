@@ -10,11 +10,10 @@ path = "./src/bin/main.rs"
 
 [dependencies]
 esp-bootloader-esp-idf = { version = "0.2.0", features = ["esp32s3"] }
-esp-hal                = { version = "=1.0.0-rc.0", features = ["esp32s3", "unstable"] }
+esp-hal                = { version = "1.0.0", features = ["esp32s3", "unstable"] }
 
 critical-section = "1.2.0"
 esp-alloc        = "0.8.0"
-embedded-graphics.workspace = true
 epd-waveshare = { workspace = true, features = ["graphics"] }
 embedded-hal-bus = "0.3.0"
 ratatui = { workspace = true }
