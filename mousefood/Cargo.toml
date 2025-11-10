@@ -18,6 +18,7 @@ thiserror.workspace = true
 embedded-graphics.workspace = true
 embedded-graphics-unicodefonts = { workspace = true, optional = true }
 weact-studio-epd = { workspace = true, optional = true }
+epd-waveshare = { workspace = true, optional = true }
 
 [dev-dependencies]
 ratatui.workspace = true
@@ -29,6 +30,7 @@ default = ["fonts", "framebuffer"]
 std = ["thiserror/std", "ratatui-core/std"]
 fonts = ["dep:embedded-graphics-unicodefonts"]
 epd-weact = ["dep:weact-studio-epd"]
+epd-waveshare = ["dep:epd-waveshare"]
 framebuffer = []
 
 [lints]
