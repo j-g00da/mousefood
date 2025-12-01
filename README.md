@@ -26,7 +26,7 @@ cargo add mousefood
 
 Exemplary setup:
 
-```rust
+```rust,ignore
 use mousefood::prelude::*;
 
 fn main() -> Result<(), std::io::Error> {
@@ -67,7 +67,7 @@ through `EmbeddedBackendConfig`.
 If only regular font is provided, it serves as a fallback.
 All fonts must be of the same size.
 
-```rust
+```rust,ignore
 use mousefood::{EmbeddedBackend, EmbeddedBackendConfig, fonts};
 
 let config = EmbeddedBackendConfig {
@@ -84,6 +84,29 @@ let backend = EmbeddedBackend::new(&mut display, config);
      src="https://github.com/j-g00da/mousefood/blob/6640da9402794ea8f9370e0dc2b4bd1ebf2c6356/assets/bold_italic.png?raw=true"
      style="max-width: 640px"/>
 </div>
+
+### Color theme
+
+Colors can be remapped using `color_theme` on `EmbeddedBackendConfig`.
+By default the ANSI palette is used for backwards compatibility.
+
+```rust,ignore
+use mousefood::{ColorTheme, EmbeddedBackend, EmbeddedBackendConfig};
+use mousefood::embedded_graphics::pixelcolor::Rgb888;
+
+let theme = ColorTheme {
+    background: Rgb888::new(5, 5, 5),
+    foreground: Rgb888::new(240, 240, 240),
+    yellow: Rgb888::new(255, 200, 0),
+    ..ColorTheme::ansi()
+};
+
+let config = EmbeddedBackendConfig {
+    color_theme: theme,
+    ..Default::default()
+};
+let backend = EmbeddedBackend::new(&mut display, config);
+```
 
 ### Simulator
 
@@ -114,7 +137,7 @@ Support for EPD (e-ink displays) produced by WeAct Studio
 (`weact-studio-epd` driver) can be enabled using `epd-weact` feature.
 This driver requires some additional configuration:
 
-```rust
+```rust,ignore
 use mousefood::prelude::*;
 use weact_studio_epd::graphics::Display290BlackWhite;
 use weact_studio_epd::WeActStudio290BlackWhiteDriver;

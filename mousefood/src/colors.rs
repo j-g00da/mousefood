@@ -4,65 +4,134 @@ use embedded_graphics::pixelcolor::{
 };
 use ratatui_core::style::Color;
 
+/// Defines how ratatui colors should be mapped to the display colors.
+#[derive(Clone, Copy)]
+pub struct ColorTheme {
+    /// Default foreground color when `Color::Reset` is used.
+    pub foreground: Rgb888,
+    /// Default background color when `Color::Reset` is used.
+    pub background: Rgb888,
+    /// ANSI white mapping.
+    pub white: Rgb888,
+    /// ANSI black mapping.
+    pub black: Rgb888,
+    /// ANSI red mapping.
+    pub red: Rgb888,
+    /// ANSI green mapping.
+    pub green: Rgb888,
+    /// ANSI yellow mapping.
+    pub yellow: Rgb888,
+    /// ANSI blue mapping.
+    pub blue: Rgb888,
+    /// ANSI magenta mapping.
+    pub magenta: Rgb888,
+    /// ANSI cyan mapping.
+    pub cyan: Rgb888,
+    /// ANSI bright red mapping.
+    pub light_red: Rgb888,
+    /// ANSI bright green mapping.
+    pub light_green: Rgb888,
+    /// ANSI bright yellow mapping.
+    pub light_yellow: Rgb888,
+    /// ANSI bright blue mapping.
+    pub light_blue: Rgb888,
+    /// ANSI bright magenta mapping.
+    pub light_magenta: Rgb888,
+    /// ANSI bright cyan mapping.
+    pub light_cyan: Rgb888,
+    /// ANSI gray mapping.
+    pub gray: Rgb888,
+    /// ANSI dark gray mapping.
+    pub dark_gray: Rgb888,
+}
+
+impl ColorTheme {
+    /// ANSI color palette used by default.
+    pub const fn ansi() -> Self {
+        Self {
+            foreground: Rgb888::WHITE,
+            background: Rgb888::BLACK,
+            white: Rgb888::WHITE,
+            black: Rgb888::BLACK,
+            red: Rgb888::RED,
+            green: Rgb888::GREEN,
+            yellow: Rgb888::YELLOW,
+            blue: Rgb888::BLUE,
+            magenta: Rgb888::MAGENTA,
+            cyan: Rgb888::CYAN,
+            light_red: Rgb888::new(Rgb888::MAX_R, Rgb888::MAX_G / 2, Rgb888::MAX_B / 2),
+            light_green: Rgb888::new(Rgb888::MAX_R / 2, Rgb888::MAX_G, Rgb888::MAX_B / 2),
+            light_yellow: Rgb888::new(Rgb888::MAX_R, Rgb888::MAX_G, Rgb888::MAX_B / 2),
+            light_blue: Rgb888::new(Rgb888::MAX_R / 2, Rgb888::MAX_G / 2, Rgb888::MAX_B),
+            light_magenta: Rgb888::new(Rgb888::MAX_R, Rgb888::MAX_G / 2, Rgb888::MAX_B),
+            light_cyan: Rgb888::new(Rgb888::MAX_R / 2, Rgb888::MAX_G, Rgb888::MAX_B),
+            gray: Rgb888::new(Rgb888::MAX_R / 2, Rgb888::MAX_G / 2, Rgb888::MAX_B / 2),
+            dark_gray: Rgb888::new(170, 170, 170),
+        }
+    }
+
+    pub(crate) fn resolve(&self, color: Color, color_type: TermColorType) -> Rgb888 {
+        match color {
+            Color::Reset => match color_type {
+                TermColorType::Foreground => self.foreground,
+                TermColorType::Background => self.background,
+            },
+            Color::White => self.white,
+            Color::Black => self.black,
+            Color::Red => self.red,
+            Color::Green => self.green,
+            Color::Yellow => self.yellow,
+            Color::Blue => self.blue,
+            Color::Magenta => self.magenta,
+            Color::Cyan => self.cyan,
+
+            Color::LightRed => self.light_red,
+            Color::LightGreen => self.light_green,
+            Color::LightYellow => self.light_yellow,
+            Color::LightBlue => self.light_blue,
+            Color::LightMagenta => self.light_magenta,
+            Color::LightCyan => self.light_cyan,
+            Color::Gray => self.gray,
+            Color::DarkGray => self.dark_gray,
+
+            Color::Rgb(r, g, b) => Rgb888::new(r, g, b),
+            Color::Indexed(_) => Rgb888::BLACK,
+        }
+    }
+}
+
+impl Default for ColorTheme {
+    fn default() -> Self {
+        Self::ansi()
+    }
+}
+
+#[derive(Clone, Copy)]
 pub enum TermColorType {
     Foreground,
     Background,
 }
 
-pub struct TermColor(pub Color, pub TermColorType);
+#[derive(Clone, Copy)]
+pub struct TermColor<'a>(pub Color, pub TermColorType, pub &'a ColorTheme);
+
+impl<'a> TermColor<'a> {
+    pub fn new(color: Color, color_type: TermColorType, theme: &'a ColorTheme) -> Self {
+        Self(color, color_type, theme)
+    }
+
+    fn to_rgb888(&self) -> Rgb888 {
+        self.2.resolve(self.0, self.1)
+    }
+}
 
 macro_rules! impl_from_term_color {
     (
         $color_type:ident
     ) => {
-        impl From<TermColor> for $color_type {
-            fn from(color: TermColor) -> Self {
-                const LIGHT_RED: Rgb888 =
-                    Rgb888::new(Rgb888::MAX_R, Rgb888::MAX_G / 2, Rgb888::MAX_B / 2);
-                const LIGHT_GREEN: Rgb888 =
-                    Rgb888::new(Rgb888::MAX_R / 2, Rgb888::MAX_G, Rgb888::MAX_B / 2);
-                const LIGHT_YELLOW: Rgb888 =
-                    Rgb888::new(Rgb888::MAX_R, Rgb888::MAX_G, Rgb888::MAX_B / 2);
-                const LIGHT_BLUE: Rgb888 =
-                    Rgb888::new(Rgb888::MAX_R / 2, Rgb888::MAX_G / 2, Rgb888::MAX_B);
-                const LIGHT_MAGENTA: Rgb888 =
-                    Rgb888::new(Rgb888::MAX_R, Rgb888::MAX_G / 2, Rgb888::MAX_B);
-                const LIGHT_CYAN: Rgb888 =
-                    Rgb888::new(Rgb888::MAX_R / 2, Rgb888::MAX_G, Rgb888::MAX_B);
-                const GRAY: Rgb888 =
-                    Rgb888::new(Rgb888::MAX_R / 2, Rgb888::MAX_G / 2, Rgb888::MAX_B / 2);
-                const DARK_GRAY: Rgb888 = Rgb888::new(
-                    (2.0 / 3.0 * (Rgb888::MAX_R as f32)) as u8,
-                    (2.0 / 3.0 * (Rgb888::MAX_G as f32)) as u8,
-                    (2.0 / 3.0 * (Rgb888::MAX_B as f32)) as u8,
-                );
-
-                match color.0 {
-                    Color::Reset => match color.1 {
-                        TermColorType::Foreground => $color_type::WHITE,
-                        TermColorType::Background => $color_type::BLACK,
-                    },
-                    Color::White => $color_type::WHITE,
-                    Color::Black => $color_type::BLACK,
-                    Color::Red => $color_type::RED,
-                    Color::Green => $color_type::GREEN,
-                    Color::Yellow => $color_type::YELLOW,
-                    Color::Blue => $color_type::BLUE,
-                    Color::Magenta => $color_type::MAGENTA,
-                    Color::Cyan => $color_type::CYAN,
-
-                    Color::LightRed => LIGHT_RED.into(),
-                    Color::LightGreen => LIGHT_GREEN.into(),
-                    Color::LightYellow => LIGHT_YELLOW.into(),
-                    Color::LightBlue => LIGHT_BLUE.into(),
-                    Color::LightMagenta => LIGHT_MAGENTA.into(),
-                    Color::LightCyan => LIGHT_CYAN.into(),
-                    Color::Gray => GRAY.into(),
-                    Color::DarkGray => DARK_GRAY.into(),
-
-                    Color::Rgb(r, g, b) => Rgb888::new(r, g, b).into(),
-                    Color::Indexed(_) => todo!("Color::Indexed not implemented yet!"),
-                }
+        impl<'a> From<TermColor<'a>> for $color_type {
+            fn from(color: TermColor<'a>) -> Self {
+                color.to_rgb888().into()
             }
         }
     };
@@ -70,12 +139,11 @@ macro_rules! impl_from_term_color {
 
 for_all_rgb_colors!(impl_from_term_color);
 
-impl From<TermColor> for BinaryColor {
-    fn from(color: TermColor) -> Self {
-        match color.0 {
-            Color::Black => BinaryColor::Off,
-            Color::White => BinaryColor::On,
-            // Fallback
+impl<'a> From<TermColor<'a>> for BinaryColor {
+    fn from(color: TermColor<'a>) -> Self {
+        match color.to_rgb888() {
+            rgb if rgb == Rgb888::BLACK => BinaryColor::Off,
+            rgb if rgb == Rgb888::WHITE => BinaryColor::On,
             _ => match color.1 {
                 TermColorType::Foreground => BinaryColor::On,
                 TermColorType::Background => BinaryColor::Off,
@@ -85,20 +153,20 @@ impl From<TermColor> for BinaryColor {
 }
 
 #[cfg(feature = "epd-weact")]
-impl From<TermColor> for weact_studio_epd::Color {
-    fn from(color: TermColor) -> Self {
+impl<'a> From<TermColor<'a>> for weact_studio_epd::Color {
+    fn from(color: TermColor<'a>) -> Self {
         BinaryColor::from(color).into()
     }
 }
 
 #[cfg(feature = "epd-weact")]
-impl From<TermColor> for weact_studio_epd::TriColor {
-    fn from(color: TermColor) -> Self {
-        match color.0 {
-            Color::White => weact_studio_epd::TriColor::White,
-            Color::Black => weact_studio_epd::TriColor::Black,
-            Color::Red => weact_studio_epd::TriColor::Red,
-            // Fallback
+impl<'a> From<TermColor<'a>> for weact_studio_epd::TriColor {
+    fn from(color: TermColor<'a>) -> Self {
+        let rgb = color.to_rgb888();
+        match rgb {
+            rgb if rgb == Rgb888::WHITE => weact_studio_epd::TriColor::White,
+            rgb if rgb == Rgb888::BLACK => weact_studio_epd::TriColor::Black,
+            rgb if rgb == Rgb888::RED => weact_studio_epd::TriColor::Red,
             _ => match color.1 {
                 TermColorType::Foreground => weact_studio_epd::TriColor::Black,
                 TermColorType::Background => weact_studio_epd::TriColor::White,
@@ -114,6 +182,12 @@ mod tests {
     use TermColorType::*;
     use paste::paste;
     use rstest::rstest;
+
+    const TEST_THEME: ColorTheme = ColorTheme::ansi();
+
+    fn themed(color_type: TermColorType, color_from: Color) -> TermColor<'static> {
+        TermColor::new(color_from, color_type, &TEST_THEME)
+    }
 
     macro_rules! into_eg_color {
         ($color_type:ident) => {
@@ -158,7 +232,7 @@ mod tests {
                     #[case] color_from: Color,
                     #[case] color_into: $color_type
                 ) {
-                    let output: $color_type = TermColor(color_from, color_type).into();
+                    let output: $color_type = themed(color_type, color_from).into();
                     assert_eq!(output, color_into);
                 }
             }
@@ -178,7 +252,7 @@ mod tests {
         #[case] color_from: Color,
         #[case] color_into: BinaryColor,
     ) {
-        let output: BinaryColor = TermColor(color_from, color_type).into();
+        let output: BinaryColor = themed(color_type, color_from).into();
         assert_eq!(output, color_into);
     }
 
@@ -193,7 +267,7 @@ mod tests {
         #[case] color_from: Color,
         #[case] color_into: weact_studio_epd::Color,
     ) {
-        let output: weact_studio_epd::Color = TermColor(color_from, color_type).into();
+        let output: weact_studio_epd::Color = themed(color_type, color_from).into();
         assert_eq!(output, color_into);
     }
 
@@ -210,7 +284,7 @@ mod tests {
         #[case] color_from: Color,
         #[case] color_into: weact_studio_epd::TriColor,
     ) {
-        let output: weact_studio_epd::TriColor = TermColor(color_from, color_type).into();
+        let output: weact_studio_epd::TriColor = themed(color_type, color_from).into();
         assert_eq!(output, color_into);
     }
 }

@@ -46,6 +46,9 @@ where
     /// Determines how the view is horizontally aligned when the display width
     /// is not an exact multiple of the font width.
     pub horizontal_alignment: TerminalAlignment,
+
+    /// Color theme that maps Ratatui colors to display pixels.
+    pub color_theme: ColorTheme,
 }
 
 impl<D, C> Default for EmbeddedBackendConfig<D, C>
@@ -61,6 +64,7 @@ where
             font_italic: None,
             vertical_alignment: TerminalAlignment::Start,
             horizontal_alignment: TerminalAlignment::Start,
+            color_theme: ColorTheme::default(),
         }
     }
 }
@@ -69,7 +73,7 @@ where
 ///
 /// # Examples
 ///
-/// ```rust,no_run
+/// ```rust,ignore
 /// use mousefood::prelude::*;
 ///
 /// let backend = EmbeddedBackend::new(&mut display, EmbeddedBackendConfig::default());
@@ -96,12 +100,13 @@ where
 
     columns_rows: layout::Size,
     pixels: layout::Size,
+    color_theme: ColorTheme,
 }
 
 impl<'display, D, C> EmbeddedBackend<'display, D, C>
 where
     D: DrawTarget<Color = C> + Dimensions + 'static,
-    C: PixelColor + Into<Rgb888> + From<Rgb888> + From<TermColor> + 'static,
+    C: PixelColor + Into<Rgb888> + From<Rgb888> + for<'a> From<TermColor<'a>> + 'static,
 {
     fn init(
         display: &'display mut D,
@@ -111,6 +116,7 @@ where
         font_italic: Option<MonoFont<'static>>,
         vertical_alignment: TerminalAlignment,
         horizontal_alignment: TerminalAlignment,
+        color_theme: ColorTheme,
     ) -> EmbeddedBackend<'display, D, C> {
         let pixels = layout::Size {
             width: display.bounding_box().size.width as u16,
@@ -135,7 +141,7 @@ where
 
         Self {
             #[cfg(feature = "framebuffer")]
-            buffer: crate::framebuffer::HeapBuffer::new(display.bounding_box()),
+            buffer: crate::framebuffer::HeapBuffer::new(display.bounding_box(), color_theme),
             display,
             display_type: PhantomData,
             flush_callback: Box::new(flush_callback),
@@ -148,6 +154,7 @@ where
                 width: pixels.width / font_regular.character_size.width as u16,
             },
             pixels,
+            color_theme,
         }
     }
 
@@ -164,6 +171,7 @@ where
             config.font_italic,
             config.vertical_alignment,
             config.horizontal_alignment,
+            config.color_theme,
         )
     }
 }
@@ -173,7 +181,7 @@ type Result<T, E = crate::error::Error> = core::result::Result<T, E>;
 impl<D, C> Backend for EmbeddedBackend<'_, D, C>
 where
     D: DrawTarget<Color = C> + 'static,
-    C: PixelColor + Into<Rgb888> + From<Rgb888> + From<TermColor> + 'static,
+    C: PixelColor + Into<Rgb888> + From<Rgb888> + for<'a> From<TermColor<'a>> + 'static,
 {
     type Error = crate::error::Error;
 
@@ -189,8 +197,12 @@ where
 
             let mut style_builder = MonoTextStyleBuilder::new()
                 .font(&self.font_regular)
-                .text_color(TermColor(cell.fg, TermColorType::Foreground).into())
-                .background_color(TermColor(cell.bg, TermColorType::Background).into());
+                .text_color(
+                    TermColor::new(cell.fg, TermColorType::Foreground, &self.color_theme).into(),
+                )
+                .background_color(
+                    TermColor::new(cell.bg, TermColorType::Background, &self.color_theme).into(),
+                );
 
             for modifier in cell.modifier.iter() {
                 style_builder = match modifier {
@@ -215,7 +227,12 @@ where
 
             if cell.underline_color != style::Color::Reset {
                 style_builder = style_builder.underline_with_color(
-                    TermColor(cell.underline_color, TermColorType::Foreground).into(),
+                    TermColor::new(
+                        cell.underline_color,
+                        TermColorType::Foreground,
+                        &self.color_theme,
+                    )
+                    .into(),
                 );
             }
 
@@ -262,7 +279,14 @@ where
     #[cfg(feature = "framebuffer")]
     fn clear(&mut self) -> Result<()> {
         self.buffer
-            .clear(TermColor(style::Color::Reset, TermColorType::Background).into())
+            .clear(
+                TermColor::new(
+                    style::Color::Reset,
+                    TermColorType::Background,
+                    &self.color_theme,
+                )
+                .into(),
+            )
             .map_err(|_| crate::error::Error::DrawError)
     }
 
