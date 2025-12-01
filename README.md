@@ -32,7 +32,7 @@ use mousefood::prelude::*;
 fn main() -> Result<(), std::io::Error> {
     // Any embedded_graphics DrawTarget
     let mut display = MyDrawTarget::new();
-    
+
     let backend = EmbeddedBackend::new(&mut display, EmbeddedBackendConfig::default());
     let mut terminal = Terminal::new(backend)?;
 
@@ -88,7 +88,7 @@ let backend = EmbeddedBackend::new(&mut display, config);
 ### Color theme
 
 Colors can be remapped using `color_theme` on `EmbeddedBackendConfig`.
-By default the ANSI palette is used for backwards compatibility.
+By default the ANSI palette is used.
 
 ```rust,ignore
 use mousefood::{ColorTheme, EmbeddedBackend, EmbeddedBackendConfig};
@@ -107,6 +107,24 @@ let config = EmbeddedBackendConfig {
 };
 let backend = EmbeddedBackend::new(&mut display, config);
 ```
+
+#### Built-in themes
+
+Mousefood includes popular color themes that can be used directly:
+
+```rust,ignore
+use mousefood::{ColorTheme, EmbeddedBackendConfig};
+
+let config = EmbeddedBackendConfig {
+    color_theme: ColorTheme::tokionight(),
+    ..Default::default()
+};
+```
+
+Available themes:
+- `ColorTheme::ansi()` - Standard ANSI colors (default)
+- `ColorTheme::tokionight()` - Tokyo Night dark theme with blue/purple tones
+
 
 ### Simulator
 
