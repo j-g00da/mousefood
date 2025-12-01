@@ -70,6 +70,30 @@ impl ColorTheme {
         }
     }
 
+    /// Tokyo Night color theme - a popular dark theme with blue/purple tones.
+    pub const fn tokionight() -> Self {
+        Self {
+            foreground: Rgb888::new(0xa9, 0xb1, 0xd6), // Light blue-gray text
+            background: Rgb888::new(0x1a, 0x1b, 0x26), // Dark blue-black background
+            white: Rgb888::new(0xc0, 0xca, 0xf5),      // Light blue-white
+            black: Rgb888::new(0x41, 0x48, 0x68),      // Dark blue-gray
+            red: Rgb888::new(0xf7, 0x76, 0x8e),        // Soft red
+            green: Rgb888::new(0x73, 0xda, 0xca),      // Soft green/teal
+            yellow: Rgb888::new(0xe0, 0xaf, 0x68),     // Soft yellow/orange
+            blue: Rgb888::new(0x7a, 0xa2, 0xf7),       // Soft blue
+            magenta: Rgb888::new(0xbb, 0x9a, 0xf7),    // Soft purple
+            cyan: Rgb888::new(0x7d, 0xcf, 0xff),       // Soft cyan
+            light_red: Rgb888::new(0xf7, 0x76, 0x8e),  // Same as red
+            light_green: Rgb888::new(0x73, 0xda, 0xca), // Same as green
+            light_yellow: Rgb888::new(0xe0, 0xaf, 0x68), // Same as yellow
+            light_blue: Rgb888::new(0x7a, 0xa2, 0xf7), // Same as blue
+            light_magenta: Rgb888::new(0xbb, 0x9a, 0xf7), // Same as magenta
+            light_cyan: Rgb888::new(0x7d, 0xcf, 0xff), // Same as cyan
+            gray: Rgb888::new(0xc0, 0xca, 0xf5),       // Light blue-white
+            dark_gray: Rgb888::new(0x41, 0x48, 0x68),  // Dark blue-gray
+        }
+    }
+
     pub(crate) fn resolve(&self, color: Color, color_type: TermColorType) -> Rgb888 {
         match color {
             Color::Reset => match color_type {
