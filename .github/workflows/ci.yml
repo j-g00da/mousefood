@@ -52,23 +52,49 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
   clippy:
-    name: Run clippy
+    name: Run clippy (${{ matrix.project.name }})
     runs-on: ubuntu-latest
     permissions:
       checks: write
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          # Core no_std workspace (default host build)
+          - name: workspace
+            dir: .
+            target: ""
+            setup_xtensa: false
+          # ESP-IDF demo using Xtensa toolchain
+          - name: esp32-std-demo
+            dir: examples/mousefood-esp32-std-demo
+            target: xtensa-esp32-espidf
+            setup_xtensa: true
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Install Rust stable
+      - name: Setup Rust (stable)
+        if: ${{ matrix.project.setup_xtensa == false }}
         uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
-      - name: Run clippy action
-        uses: clechasseur/rs-clippy-check@v5
+      - name: Setup Xtensa toolchain (ESP-IDF)
+        if: ${{ matrix.project.setup_xtensa == true }}
+        uses: esp-rs/xtensa-toolchain@v1.6.0
         with:
-          args: --workspace
+          default: true
+          buildtargets: esp32
+          ldproxy: true
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
+      - name: Run Clippy
+        working-directory: ${{ matrix.project.dir }}
+        run: |
+          if [ -n "${{ matrix.project.target }}" ]; then
+            cargo clippy --target "${{ matrix.project.target }}" -- -D warnings
+          else
+            cargo clippy -- -D warnings
+          fi
 
   test:
     runs-on: ubuntu-latest
@@ -99,7 +125,7 @@ jobs:
           # - thumbv6m-none-eabi
           # - riscv32imc-unknown-none-elf # esp32c2, esp32c3
           # - riscv32imac-unknown-none-elf # esp32c6, esp32h2
-        toolchain: [ "1.86.0", "stable" ]
+        toolchain: ["1.86.0", "stable"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -129,4 +155,3 @@ jobs:
           default: true
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --features=std --target ${{ matrix.target }} -Zbuild-std=std,panic_abort -Zbuild-std-features=panic_immediate_abort
-
