@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: DavidAnson/markdownlint-cli2-action@v20
+      - uses: DavidAnson/markdownlint-cli2-action@v22
         with:
           globs: '**/*.md,#CHANGELOG.md'
           separator: ','
@@ -99,7 +99,7 @@ jobs:
           # - thumbv6m-none-eabi
           # - riscv32imc-unknown-none-elf # esp32c2, esp32c3
           # - riscv32imac-unknown-none-elf # esp32c6, esp32h2
-        toolchain: [ "1.85.0", "stable" ]
+        toolchain: [ "1.86.0", "stable" ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
