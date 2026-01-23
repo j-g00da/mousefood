@@ -32,10 +32,10 @@ fn main() -> Result<(), Error> {
         "mousefood simulator",
         &OutputSettings {
             scale: 4,
-            max_fps: 30,
             ..Default::default()
         },
     );
+    simulator_window.set_max_fps(30);
 
     // Define properties of the display which will be shown in the simulator window
     let mut display = SimulatorDisplay::<Bgr565>::new(geometry::Size::new(128, 64));

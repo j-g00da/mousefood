@@ -5,24 +5,24 @@ default-members = ["mousefood"]
 
 [workspace.package]
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.86"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-homepage = "https://github.com/j-g00da/mousefood"
-repository = "https://github.com/j-g00da/mousefood"
+homepage = "https://github.com/ratatui/mousefood"
+repository = "https://github.com/ratatui/mousefood"
 keywords = ["embedded-graphics", "ratatui", "tui"]
 categories = ["embedded"]
 exclude = ["/.github", "/assets"]
 
 [workspace.dependencies]
-ratatui-core = { version = "0.1.0-beta.0", features = ["underline-color"] }
-thiserror = { version = "2.0.16", default-features = false }
+ratatui-core = { version = "0.1.0", features = ["underline-color"] }
+thiserror = { version = "2.0.18", default-features = false }
 embedded-graphics = "0.8.1"
-embedded-graphics-simulator = "0.7.0"
+embedded-graphics-simulator = "0.8.0"
 embedded-graphics-unicodefonts = "0.2.0"
 weact-studio-epd = { version = "0.1.2", features = ["blocking"] }
-epd-waveshare = { version = "0.6.0" }
-ratatui = { version = "0.30.0-beta.0", default-features = false }
+epd-waveshare = "0.6.0"
+ratatui = { version = "0.30.0", default-features = false }
 rstest = "0.26.1"
 paste = "1.0.15"
 
