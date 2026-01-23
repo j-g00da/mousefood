@@ -74,7 +74,7 @@ jobs:
           - name: epd-waveshare-demo
             dir: examples/epd-waveshare-demo
             target: ""
-            setup_xtensa: false
+            setup_xtensa: true
     steps:
       - name: Checkout
         uses: actions/checkout@v6
