@@ -36,7 +36,7 @@ esp_bootloader_esp_idf::esp_app_desc!();
 fn main() -> ! {
     let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
     let peripherals = esp_hal::init(config);
-    esp_alloc::heap_allocator!(size: 128* 1024);
+    esp_alloc::heap_allocator!(size: 128 * 1024);
 
     // setup spi
     let sck = peripherals.GPIO12;

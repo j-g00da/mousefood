@@ -1,19 +1,15 @@
 [package]
-edition      = "2021"
 name         = "epd-waveshare-demo"
-rust-version = "1.88"
 version      = "0.1.0"
-
-[[bin]]
-name = "epd-waveshare-demo"
-path = "./src/bin/main.rs"
+edition      = "2024"
+rust-version = "1.88"
 
 [dependencies]
 esp-bootloader-esp-idf = { version = "0.2.0", features = ["esp32s3"] }
 esp-hal                = { version = "1.0.0", features = ["esp32s3", "unstable"] }
 
 critical-section = "1.2.0"
-esp-alloc        = "0.8.0"
+esp-alloc        = "0.9.0"
 epd-waveshare = { workspace = true, features = ["graphics"] }
 embedded-hal-bus = "0.3.0"
 ratatui = { workspace = true }
