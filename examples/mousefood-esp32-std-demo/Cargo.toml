@@ -28,11 +28,11 @@ esp-idf-svc = { version = "0.51", features = [
   "embassy-time-driver",
   "embassy-sync",
 ] }
-time = { version = "0.3.41" }
+time = "0.3.45"
 rand = "0.9.1"
 mipidsi = "0.9.0"
 mousefood = { path = "../../mousefood/" }
-tui-big-text = "=0.7.0"
+tui-big-text = "0.8.1"
 ratatui = { workspace = true, features = ["std", "widget-calendar"] }
 
 [build-dependencies]
