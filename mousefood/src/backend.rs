@@ -56,7 +56,7 @@ where
     fn default() -> Self {
         Self {
             flush_callback: Box::new(|_| {}),
-            font_regular: default_font::regular,
+            font_regular: default_font::get_regular(),
             font_bold: None,
             font_italic: None,
             vertical_alignment: TerminalAlignment::Start,
@@ -205,12 +205,12 @@ where
             for modifier in cell.modifier.iter() {
                 style_builder = match modifier {
                     style::Modifier::BOLD => match &self.font_bold {
-                        None => style_builder.font(&self.font_regular),
+                        None => style_builder,
                         Some(font) => style_builder.font(font),
                     },
                     style::Modifier::DIM => style_builder, // TODO
                     style::Modifier::ITALIC => match &self.font_italic {
-                        None => style_builder.font(&self.font_regular),
+                        None => style_builder,
                         Some(font) => style_builder.font(font),
                     },
                     style::Modifier::UNDERLINED => style_builder.underline(),

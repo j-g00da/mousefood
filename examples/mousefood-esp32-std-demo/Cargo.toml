@@ -1,0 +1,39 @@
+[package]
+name = "mousefood-esp32-std-demo"
+version = "0.1.0"
+authors = ["Jagoda Estera Ślązak <jslazak@jslazak.com>"]
+edition = "2024"
+rust-version = "1.85.0"
+
+[[bin]]
+name = "mousefood-esp32-std-demo"
+harness = false                   # do not use the built in cargo test harness -> resolve rust-analyzer errors
+
+# Commented out due to workspace profiles being used
+# Feel free to uncomment and adjust if you have copied this outside of a workspace
+# [profile.release]
+# opt-level = 3
+#
+# [profile.dev]
+# debug = true    # Symbols are nice and they don't increase the size on Flash
+# opt-level = 3
+
+[features]
+default = []
+experimental = ["esp-idf-svc/experimental"]
+
+[dependencies]
+esp-idf-svc = { version = "0.51", features = [
+  "critical-section",
+  "embassy-time-driver",
+  "embassy-sync",
+] }
+time = "0.3.45"
+rand = "0.9.1"
+mipidsi = "0.9.0"
+mousefood = { path = "../../mousefood/" }
+tui-big-text = "0.8.1"
+ratatui = { workspace = true, features = ["std", "widget-calendar"] }
+
+[build-dependencies]
+embuild = "0.33"
