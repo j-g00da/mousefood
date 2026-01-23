@@ -36,7 +36,7 @@ footer = """
 trim = true
 # postprocessors
 postprocessors = [
-  { pattern = '<REPO>', replace = "https://github.com/j-g00da/mousefood" },
+  { pattern = '<REPO>', replace = "https://github.com/ratatui/mousefood" },
 ]
 # output file path
 output = "CHANGELOG.md"

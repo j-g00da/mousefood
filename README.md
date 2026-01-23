@@ -1,23 +1,18 @@
-# ![Mousefood](https://github.com/j-g00da/mousefood/blob/599f1026d37c8d6308a6df64a234dbefaedc0c6f/assets/logo/mousefood.svg?raw=true)
+# ![Mousefood](https://github.com/ratatui/mousefood/blob/599f1026d37c8d6308a6df64a234dbefaedc0c6f/assets/logo/mousefood.svg?raw=true)
 
 [![Crate](https://img.shields.io/crates/v/mousefood?logo=rust&style=flat-square&color=ebe94f)](https://crates.io/crates/mousefood)
 [![Docs](https://img.shields.io/docsrs/mousefood?logo=rust&style=flat-square)](https://docs.rs/mousefood)
-[![CI](https://img.shields.io/github/actions/workflow/status/j-g00da/mousefood/ci.yml?style=flat-square&logo=github)](https://github.com/j-g00da/mousefood/blob/main/.github/workflows/ci.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/ratatui/mousefood/ci.yml?style=flat-square&logo=github)](https://github.com/ratatui/mousefood/blob/main/.github/workflows/ci.yml)
 [![Deps](https://deps.rs/crate/mousefood/latest/status.svg?style=flat-square)](https://deps.rs/crate/mousefood)
 
-**Mousefood** - [embedded-graphics](https://crates.io/crates/embedded-graphics) backend
+**Mousefood** - a no-std
+[embedded-graphics](https://crates.io/crates/embedded-graphics) backend
 for [Ratatui](https://crates.io/crates/ratatui)!
-
-> [!IMPORTANT]  
-> Currently works only with `std`-enabled targets,
-> such as Espressif's ESP32 MCU series.
-> Support for "bare-metal" (`no_std`) targets is planned,
-> but it requires upstream changes - [ratatui #1750](https://github.com/ratatui/ratatui/issues/1750).
 
 <div align="center">
 
-![demo](https://github.com/j-g00da/mousefood/blob/599f1026d37c8d6308a6df64a234dbefaedc0c6f/assets/demo.jpg?raw=true)
-![animated demo](https://github.com/j-g00da/mousefood/blob/599f1026d37c8d6308a6df64a234dbefaedc0c6f/assets/demo.gif?raw=true)
+![demo](https://github.com/ratatui/mousefood/blob/599f1026d37c8d6308a6df64a234dbefaedc0c6f/assets/demo.jpg?raw=true)
+![animated demo](https://github.com/ratatui/mousefood/blob/599f1026d37c8d6308a6df64a234dbefaedc0c6f/assets/demo.gif?raw=true)
 
 </div>
 
@@ -37,7 +32,7 @@ use mousefood::prelude::*;
 fn main() -> Result<(), std::io::Error> {
     // Any embedded_graphics DrawTarget
     let mut display = MyDrawTarget::new();
-    
+
     let backend = EmbeddedBackend::new(&mut display, EmbeddedBackendConfig::default());
     let mut terminal = Terminal::new(backend)?;
 
@@ -86,50 +81,32 @@ let backend = EmbeddedBackend::new(&mut display, config);
 
 <div align="center">
 <img alt="Bold and Italic fonts"
-     src="https://github.com/j-g00da/mousefood/blob/6640da9402794ea8f9370e0dc2b4bd1ebf2c6356/assets/bold_italic.png?raw=true"
+     src="https://github.com/ratatui/mousefood/blob/6640da9402794ea8f9370e0dc2b4bd1ebf2c6356/assets/bold_italic.png?raw=true"
      style="max-width: 640px"/>
 </div>
 
 ### Simulator
 
-Mousefood can be run in a simulator
-(requires [SDL2](https://wiki.libsdl.org/SDL2/Installation) to be installed).
-The simulator mode can be enabled using the `simulator` feature and utilizes the
-[embedded-graphics-simulator](https://crates.io/crates/embedded-graphics-simulator)
-crate.
+Mousefood can be run in a simulator using
+[embedded-graphics-simulator](https://crates.io/crates/embedded-graphics-simulator) crate.
+
+![Screenshot of a window running the simulator with a mousefood application](https://github.com/ratatui/mousefood/blob/66d4010deed18f755cc3148a7f682f4119b7f664/assets/simulator.png?raw=true)
 
 Run simulator example:
 
 ```shell
-git clone https://github.com/j-g00da/mousefood.git
-cd mousefood
-cargo run --example=simulator --features=simulator
+git clone https://github.com/ratatui/mousefood.git
+cd mousefood/examples/simulator
+cargo run
 ```
 
-Exemplary setup using simulator:
-
-```rust
-use mousefood::prelude::*;
-use mousefood::embedded_graphics::geometry;
-use mousefood::simulator::SimulatorDisplay;
-
-fn main() -> Result<(), std::io::Error> {
-    let mut display = SimulatorDisplay::<Bgr565>::new(geometry::Size::new(128, 64));
-    let backend: EmbeddedBackend<SimulatorDisplay<_>, _> =
-        EmbeddedBackend::new(&mut display, EmbeddedBackendConfig::default());
-    let mut terminal = Terminal::new(backend)?;
-
-    loop {
-        terminal.draw(...)?;
-    }
-}
-```
+For more details, view the [simulator example](examples/simulator).
 
 ### EPD support
 
 <div align="center">
 
-![WeAct epd demo](https://github.com/j-g00da/mousefood/blob/fa70cdd46567a51895caf10c44fff4104602e880/assets/epd-weact.jpg?raw=true)
+![WeAct epd demo](https://github.com/ratatui/mousefood/blob/fa70cdd46567a51895caf10c44fff4104602e880/assets/epd-weact.jpg?raw=true)
 
 </div>
 
@@ -166,7 +143,7 @@ to achieve high frame rate when using the `fonts` feature,
 it is recommended to use `opt-level = 3`,
 which can make the resulting binary even larger.
 
-Mousefood is hardware-agnostic, but requires a `std`-enabled target.
+Mousefood is hardware-agnostic.
 Successfully tested on:
 
 - esp32 (base model, 4MB flash)
@@ -181,6 +158,16 @@ Full API docs are available on [docs.rs](https://docs.rs/mousefood).
 All contributions are welcome!
 
 Before opening a pull request, please read the [contributing guidelines](./CONTRIBUTING.md).
+
+## Built with Mousefood
+
+Here are some projects built using Mousefood:
+
+- [Tuitar](https://github.com/orhun/tuitar) - A portable guitar training tool.
+- [Mnyaoo32](https://github.com/intuis/mnyaoo32) - An eccentric way to consume IRC messages using ESP32.
+- [Phone-OS](https://github.com/Julien-cpsn/Phone-OS) - A modern phone OS for ESP32 CYD.
+
+Send a pull request to add your project here!
 
 ## License
 

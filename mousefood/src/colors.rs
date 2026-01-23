@@ -77,8 +77,8 @@ impl From<TermColor> for BinaryColor {
             Color::White => BinaryColor::On,
             // Fallback
             _ => match color.1 {
-                TermColorType::Foreground => BinaryColor::Off,
-                TermColorType::Background => BinaryColor::On,
+                TermColorType::Foreground => BinaryColor::On,
+                TermColorType::Background => BinaryColor::Off,
             },
         }
     }
@@ -171,6 +171,8 @@ mod tests {
     #[case(Background, Black, BinaryColor::Off)]
     #[case(Foreground, White, BinaryColor::On)]
     #[case(Background, White, BinaryColor::On)]
+    #[case(Background, Reset, BinaryColor::Off)]
+    #[case(Foreground, Reset, BinaryColor::On)]
     fn into_binary_color(
         #[case] color_type: TermColorType,
         #[case] color_from: Color,

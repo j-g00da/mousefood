@@ -1,0 +1,10 @@
+[package]
+name = "simulator"
+edition.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+mousefood = { path = "../../mousefood/" }
+embedded-graphics-simulator.workspace = true
+ratatui.workspace = true

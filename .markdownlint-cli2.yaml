@@ -1,0 +1,8 @@
+config:
+  no-inline-html:
+    allowed_elements:
+      - div
+      - img
+  no-duplicate-heading: false
+  line-length:
+    line_length: 100
