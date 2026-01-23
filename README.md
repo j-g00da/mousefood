@@ -32,7 +32,7 @@ use mousefood::prelude::*;
 fn main() -> Result<(), std::io::Error> {
     // Any embedded_graphics DrawTarget
     let mut display = MyDrawTarget::new();
-    
+
     let backend = EmbeddedBackend::new(&mut display, EmbeddedBackendConfig::default());
     let mut terminal = Terminal::new(backend)?;
 
@@ -152,6 +152,12 @@ Successfully tested on:
 ## Docs
 
 Full API docs are available on [docs.rs](https://docs.rs/mousefood).
+
+## Contributing
+
+All contributions are welcome!
+
+Before opening a pull request, please read the [contributing guidelines](./CONTRIBUTING.md).
 
 ## Built with Mousefood
 
