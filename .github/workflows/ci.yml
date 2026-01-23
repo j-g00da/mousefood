@@ -70,6 +70,11 @@ jobs:
             dir: examples/mousefood-esp32-std-demo
             target: xtensa-esp32-espidf
             setup_xtensa: true
+          # EPD Waveshare demo 
+          - name: epd-waveshare-demo
+            dir: examples/epd-waveshare-demo
+            target: ""
+            setup_xtensa: true
     steps:
       - name: Checkout
         uses: actions/checkout@v6
