@@ -13,8 +13,8 @@ use embedded_hal_bus::spi::ExclusiveDevice;
 use epd_waveshare::{epd2in9_v2::*, prelude::*};
 use esp_hal::gpio::{Input, InputConfig, Level, Output, OutputConfig, Pull};
 use esp_hal::spi::{
-    master::{Config, Spi},
     Mode,
+    master::{Config, Spi},
 };
 use mousefood::prelude::*;
 use ratatui::style::Stylize;
