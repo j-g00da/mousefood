@@ -23,15 +23,15 @@ jobs:
     name: Check for typos
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: crate-ci/typos@master
 
   markdown:
     name: Check Markdown
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: DavidAnson/markdownlint-cli2-action@v20
+      - uses: actions/checkout@v6
+      - uses: DavidAnson/markdownlint-cli2-action@v22
         with:
           globs: '**/*.md,#CHANGELOG.md'
           separator: ','
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -72,15 +72,13 @@ jobs:
             setup_xtensa: true
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Rust (stable)
-        if: ${{ matrix.project.setup_xtensa == false }}
+        uses: actions/checkout@v6
+      - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
-      - name: Setup Xtensa toolchain (ESP-IDF)
-        if: ${{ matrix.project.setup_xtensa == true }}
-        uses: esp-rs/xtensa-toolchain@v1.6.0
+      - name: Run clippy action
+        uses: clechasseur/rs-clippy-check@v5
         with:
           default: true
           buildtargets: esp32
@@ -100,7 +98,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Run tests
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
       - name: Run lib tests
@@ -125,10 +123,10 @@ jobs:
           # - thumbv6m-none-eabi
           # - riscv32imc-unknown-none-elf # esp32c2, esp32c3
           # - riscv32imac-unknown-none-elf # esp32c6, esp32h2
-        toolchain: [ "1.85.0", "stable" ]
+        toolchain: [ "1.86.0", "stable" ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.toolchain }}
@@ -149,7 +147,7 @@ jobs:
           - xtensa-esp32s3-espidf
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: esp-rs/xtensa-toolchain@v1.6.0
         with:
           default: true

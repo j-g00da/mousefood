@@ -24,7 +24,7 @@ This document lists all breaking changes along with tips to help you migrate smo
 
 ### Feature `simulator` is removed ([#83])
 
-[#83]: https://github.com/j-g00da/mousefood/pull/83
+[#83]: https://github.com/ratatui/mousefood/pull/83
 
 The feature `simulator` is removed to simplify code of the crate.
 
@@ -50,7 +50,7 @@ See the example in `examples/simulator/` for a complete migration example.
 
 ### Type of `EmbeddedBackendConfig::font_bold` is now `Option<MonoFont<'static>>` ([#57])
 
-[#57]: https://github.com/j-g00da/mousefood/pull/57
+[#57]: https://github.com/ratatui/mousefood/pull/57
 
 Previously, `font_bold` was a required `MonoFont<'static>`. Now it's optional to allow
 configurations where bold text is not needed or uses the same font as regular text.
@@ -103,7 +103,7 @@ let config = EmbeddedBackendConfig {
 
 ### `ratatui` is no longer re-exported ([#60])
 
-[#60]: https://github.com/j-g00da/mousefood/pull/60
+[#60]: https://github.com/ratatui/mousefood/pull/60
 
 Mousefood now depends on `ratatui-core` crate instead of `ratatui` and doesn't
 re-export it. Downstream crates should now depend on `ratatui` directly.
@@ -136,7 +136,7 @@ in embedded graphics contexts.
 
 ### The MSRV is now 1.85.0 ([#65])
 
-[#65]: https://github.com/j-g00da/mousefood/pull/65
+[#65]: https://github.com/ratatui/mousefood/pull/65
 
 The minimum supported Rust version has been updated to 1.85.0 to support Rust 2024 edition and
 latest language features.
@@ -150,11 +150,11 @@ rustup update
 rustc --version  # should show 1.85.0 or higher
 ```
 
-## [v0.2.0](https://github.com/j-g00da/mousefood/releases/tag/0.2.0)
+## [v0.2.0](https://github.com/ratatui/mousefood/releases/tag/0.2.0)
 
 ### `EmbeddedBackend::with_font` constructor removed ([#48])
 
-[#48]: https://github.com/j-g00da/mousefood/pull/48
+[#48]: https://github.com/ratatui/mousefood/pull/48
 
 The `with_font` constructor was removed in favor of the more flexible config-based approach.
 
@@ -192,7 +192,7 @@ let backend = EmbeddedBackend::new(&mut display, config);
 
 ### `fonts::BASIC_6X10` renamed to `fonts::MONO_6X10` ([#26])
 
-[#26]: https://github.com/j-g00da/mousefood/pull/26
+[#26]: https://github.com/ratatui/mousefood/pull/26
 
 The font constant was renamed to better reflect its monospace nature.
 
@@ -211,7 +211,7 @@ let config = EmbeddedBackendConfig {
 };
 ```
 
-## [v0.1.0](https://github.com/j-g00da/mousefood/releases/tag/0.1.0)
+## [v0.1.0](https://github.com/ratatui/mousefood/releases/tag/0.1.0)
 
 ### `EmbeddedBackend::new` now takes different arguments
 
@@ -231,4 +231,4 @@ Or if you need to specify custom fonts:
 + let backend = EmbeddedBackend::with_font(&mut display, font_regular, font_bold);
 ```
 
-## [v0.0.1](https://github.com/j-g00da/mousefood/releases/tag/0.0.1) - initial release
+## [v0.0.1](https://github.com/ratatui/mousefood/releases/tag/0.0.1) - initial release
