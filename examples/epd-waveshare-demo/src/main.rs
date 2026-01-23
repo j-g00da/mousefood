@@ -79,6 +79,8 @@ fn main() -> ! {
     let backend = EmbeddedBackend::new(&mut display, backend);
     let mut terminal = Terminal::new(backend).unwrap();
     terminal.draw(draw).unwrap();
+
+    Ok(())
 }
 
 fn draw(frame: &mut Frame) {
