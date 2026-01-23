@@ -33,6 +33,7 @@ extern crate alloc;
 esp_bootloader_esp_idf::esp_app_desc!();
 
 #[main]
+#[allow(clippy::empty_loop)]
 fn main() -> ! {
     let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
     let peripherals = esp_hal::init(config);
@@ -80,7 +81,7 @@ fn main() -> ! {
     let mut terminal = Terminal::new(backend).unwrap();
     terminal.draw(draw).unwrap();
 
-    Ok(())
+    loop {}
 }
 
 fn draw(frame: &mut Frame) {
