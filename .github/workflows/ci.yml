@@ -110,6 +110,8 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - name: Run lib tests
         run: cargo test --locked --lib --features epd-weact
+      - name: Run doctests
+        run: cargo test --locked -p mousefood --doc
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
 
