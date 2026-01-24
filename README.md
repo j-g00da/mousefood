@@ -110,16 +110,7 @@ let backend = EmbeddedBackend::new(&mut display, config);
 
 #### Built-in themes
 
-Mousefood includes popular color themes that can be used directly:
-
-```rust,ignore
-use mousefood::{ColorTheme, EmbeddedBackendConfig};
-
-let config = EmbeddedBackendConfig {
-    color_theme: ColorTheme::tokionight(),
-    ..Default::default()
-};
-```
+Mousefood includes popular color themes that can be used directly.
 
 Available themes:
 - `ColorTheme::ansi()` - Standard ANSI colors (default)

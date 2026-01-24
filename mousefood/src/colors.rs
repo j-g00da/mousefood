@@ -45,6 +45,12 @@ pub struct ColorTheme {
     pub dark_gray: Rgb888,
 }
 
+impl Default for ColorTheme {
+    fn default() -> Self {
+        Self::ansi()
+    }
+}
+
 impl ColorTheme {
     /// ANSI color palette used by default.
     pub const fn ansi() -> Self {
@@ -71,7 +77,7 @@ impl ColorTheme {
     }
 
     /// Tokyo Night color theme - a popular dark theme with blue/purple tones.
-    pub const fn tokionight() -> Self {
+    pub const fn tokio_night() -> Self {
         Self {
             foreground: Rgb888::new(0xa9, 0xb1, 0xd6), // Light blue-gray text
             background: Rgb888::new(0x1a, 0x1b, 0x26), // Dark blue-black background
@@ -121,12 +127,6 @@ impl ColorTheme {
             Color::Rgb(r, g, b) => Rgb888::new(r, g, b),
             Color::Indexed(_) => Rgb888::BLACK,
         }
-    }
-}
-
-impl Default for ColorTheme {
-    fn default() -> Self {
-        Self::ansi()
     }
 }
 
