@@ -27,18 +27,27 @@ cargo add mousefood
 Exemplary setup:
 
 ```rust
+use mousefood::embedded_graphics::{mock_display::MockDisplay, pixelcolor::Rgb888};
 use mousefood::prelude::*;
+use ratatui::widgets::{Block, Paragraph};
+use ratatui::{Frame, Terminal};
 
-fn main() -> Result<(), std::io::Error> {
-    // Any embedded_graphics DrawTarget
-    let mut display = MyDrawTarget::new();
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // replace this with your display driver
+    // e.g. ILI9341, ST7735, SSD1306, etc.
+    let mut display = MockDisplay::<Rgb888>::new();
 
     let backend = EmbeddedBackend::new(&mut display, EmbeddedBackendConfig::default());
     let mut terminal = Terminal::new(backend)?;
 
-    loop {
-        terminal.draw(...)?;
-    }
+    terminal.draw(draw)?;
+    Ok(())
+}
+
+fn draw(frame: &mut Frame) {
+    let block = Block::bordered().title("Mousefood");
+    let paragraph = Paragraph::new("Hello from Mousefood!").block(block);
+    frame.render_widget(paragraph, frame.area());
 }
 ```
 
@@ -68,15 +77,22 @@ If only regular font is provided, it serves as a fallback.
 All fonts must be of the same size.
 
 ```rust
+use mousefood::embedded_graphics::{mock_display::MockDisplay, pixelcolor::Rgb888};
 use mousefood::{EmbeddedBackend, EmbeddedBackendConfig, fonts};
+use ratatui::Terminal;
 
-let config = EmbeddedBackendConfig {
-    font_regular: fonts::MONO_6X13,
-    font_bold: Some(fonts::MONO_6X13_BOLD),
-    font_italic: Some(fonts::MONO_6X13_ITALIC),
-    ..Default::default()
-};
-let backend = EmbeddedBackend::new(&mut display, config);
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut display = MockDisplay::<Rgb888>::new();
+    let config = EmbeddedBackendConfig {
+        font_regular: fonts::MONO_6X13,
+        font_bold: Some(fonts::MONO_6X13_BOLD),
+        font_italic: Some(fonts::MONO_6X13_ITALIC),
+        ..Default::default()
+    };
+    let backend = EmbeddedBackend::new(&mut display, config);
+    let _terminal = Terminal::new(backend)?;
+    Ok(())
+}
 ```
 
 <div align="center">
@@ -114,53 +130,79 @@ For more details, view the [simulator example](examples/simulator).
 
 Support for EPD (e-ink displays) produced by WeAct Studio
 (`weact-studio-epd` driver) can be enabled using `epd-weact` feature.
-This driver requires some additional configuration:
 
-```rust
+This driver requires some additional configuration.
+Follow the [`weact-studio-epd`](https://docs.rs/weact-studio-epd)
+crate docs and apply the same `flush_callback` pattern used in the [Waveshare example below](#waveshare).
+
+<details>
+  <summary>Setup example</summary>
+
+```rust,ignore
 use mousefood::prelude::*;
 use weact_studio_epd::graphics::Display290BlackWhite;
 use weact_studio_epd::WeActStudio290BlackWhiteDriver;
 
-// Configure SPI
-// (...)
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Configure SPI + GPIO + delay provider for your board.
+    // let (spi_interface, busy, rst, delay) = ...;
 
-let mut driver = WeActStudio290BlackWhiteDriver::new(spi_interface, busy, rst, delay);
-let mut display = Display290BlackWhite::new();
+    let mut driver = WeActStudio290BlackWhiteDriver::new(spi_interface, busy, rst, delay);
+    let mut display = Display290BlackWhite::new();
 
-driver.init().unwrap();
+    driver.init()?;
 
-let config = EmbeddedBackendConfig {
-    flush_callback: Box::new(move |d| { driver.full_update(d).unwrap(); }),
-    ..Default::default()
-};
-let backend = EmbeddedBackend::new(&mut display, config);
+    let config = EmbeddedBackendConfig {
+        flush_callback: Box::new(move |d| {
+            driver.full_update(d).expect("epd update failed");
+        }),
+        ..Default::default()
+    };
+
+    let backend = EmbeddedBackend::new(&mut display, config);
+    let _terminal = Terminal::new(backend)?;
+    Ok(())
+}
 ```
+
+</details>
 
 #### Waveshare
 
 Support for EPD (e-ink displays) produced by Waveshare Electronics
 (`epd-waveshare` driver) can be enabled using `epd-waveshare` feature.
-This driver requires some additional configuration:
 
-```rust
+<details>
+  <summary>Setup example</summary>
+
+```rust,ignore
 use mousefood::prelude::*;
 use epd_waveshare::{epd2in9_v2::*, prelude::*};
 
-// Configure SPI
-// (...)
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Configure SPI + GPIO + delay provider for your board.
+    // let (mut spi_device, busy, dc, rst, mut delay) = ...;
 
-let mut epd = Epd2in9::new(&mut spi_device, busy, dc, rst, delay, None);
-let mut display = Display2in9::default();
+    let mut epd = Epd2in9::new(&mut spi_device, busy, dc, rst, &mut delay, None)?;
+    let mut display = Display2in9::default();
 
-let config = EmbeddedBackendConfig {
-    flush_callback: Box::new(move |d| {
-        epd.update_and_display_frame(&mut spi_device, d.buffer(), delay)
-    }),
-    ..Default::default()
-};
+    let config = EmbeddedBackendConfig {
+        flush_callback: Box::new(move |d| {
+            epd.update_and_display_frame(&mut spi_device, d.buffer(), &mut delay)
+                .expect("epd update failed");
+        }),
+        ..Default::default()
+    };
 
-let backend = EmbeddedBackend::new(&mut display, config);
+    let backend = EmbeddedBackend::new(&mut display, config);
+    let _terminal = Terminal::new(backend)?;
+    Ok(())
+}
 ```
+
+</details>
+
+See the full embedded example at [`examples/epd-waveshare-demo`](https://github.com/ratatui/mousefood/tree/main/examples/epd-waveshare-demo).
 
 ## Performance and hardware support
 

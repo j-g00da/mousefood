@@ -69,11 +69,26 @@ where
 ///
 /// # Examples
 ///
-/// ```rust,no_run
+/// ```rust
+/// use mousefood::embedded_graphics::{mock_display::MockDisplay, pixelcolor::Rgb888};
 /// use mousefood::prelude::*;
+/// use ratatui::widgets::{Block, Paragraph};
+/// use ratatui::{Frame, Terminal};
 ///
-/// let backend = EmbeddedBackend::new(&mut display, EmbeddedBackendConfig::default());
-/// let mut terminal = Terminal::new(backend).unwrap();
+/// fn main() -> Result<(), Box<dyn std::error::Error>> {
+///     let mut display = MockDisplay::<Rgb888>::new();
+///     let backend = EmbeddedBackend::new(&mut display, EmbeddedBackendConfig::default());
+///     let mut terminal = Terminal::new(backend)?;
+///
+///     terminal.draw(draw)?;
+///     Ok(())
+/// }
+///
+/// fn draw(frame: &mut Frame) {
+///     let block = Block::bordered().title("Mousefood");
+///     let paragraph = Paragraph::new("Hello from Mousefood!").block(block);
+///     frame.render_widget(paragraph, frame.area());
+/// }
 /// ```
 pub struct EmbeddedBackend<'display, D, C>
 where
