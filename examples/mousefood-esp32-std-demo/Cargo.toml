@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["Jagoda Estera Ślązak <jslazak@jslazak.com>"]
 edition = "2024"
 rust-version = "1.85.0"
+publish = false
 
 [[bin]]
 name = "mousefood-esp32-std-demo"
