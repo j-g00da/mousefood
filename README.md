@@ -113,9 +113,9 @@ let backend = EmbeddedBackend::new(&mut display, config);
 Mousefood includes popular color themes that can be used directly.
 
 Available themes:
+
 - `ColorTheme::ansi()` - Standard ANSI colors (default)
 - `ColorTheme::tokionight()` - Tokyo Night dark theme with blue/purple tones
-
 
 ### Simulator
 
