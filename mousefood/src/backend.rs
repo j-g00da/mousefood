@@ -73,11 +73,26 @@ where
 ///
 /// # Examples
 ///
-/// ```rust,ignore
+/// ```rust
+/// use mousefood::embedded_graphics::{mock_display::MockDisplay, pixelcolor::Rgb888};
 /// use mousefood::prelude::*;
+/// use ratatui::widgets::{Block, Paragraph};
+/// use ratatui::{Frame, Terminal};
 ///
-/// let backend = EmbeddedBackend::new(&mut display, EmbeddedBackendConfig::default());
-/// let mut terminal = Terminal::new(backend).unwrap();
+/// fn main() -> Result<(), Box<dyn std::error::Error>> {
+///     let mut display = MockDisplay::<Rgb888>::new();
+///     let backend = EmbeddedBackend::new(&mut display, EmbeddedBackendConfig::default());
+///     let mut terminal = Terminal::new(backend)?;
+///
+///     terminal.draw(draw)?;
+///     Ok(())
+/// }
+///
+/// fn draw(frame: &mut Frame) {
+///     let block = Block::bordered().title("Mousefood");
+///     let paragraph = Paragraph::new("Hello from Mousefood!").block(block);
+///     frame.render_widget(paragraph, frame.area());
+/// }
 /// ```
 pub struct EmbeddedBackend<'display, D, C>
 where
@@ -173,6 +188,16 @@ where
             config.horizontal_alignment,
             config.color_theme,
         )
+    }
+
+    /// Borrow the display
+    pub fn display(&self) -> &D {
+        self.display
+    }
+
+    /// Mutably borrow the display
+    pub fn display_mut(&mut self) -> &mut D {
+        self.display
     }
 }
 
@@ -325,5 +350,94 @@ where
             .map_err(|_| crate::error::Error::DrawError)?;
         (self.flush_callback)(self.display);
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use {
+        super::*,
+        embedded_graphics::{
+            mock_display::MockDisplay,
+            mono_font::{MonoTextStyle, ascii::FONT_4X6},
+            pixelcolor::{Rgb888, RgbColor},
+            prelude::*,
+            text::{Alignment, LineHeight, Text, TextStyleBuilder},
+        },
+        ratatui::Terminal,
+        rstest::{fixture, rstest},
+    };
+
+    #[fixture]
+    fn display0() -> MockDisplay<Rgb888> {
+        let mut d = MockDisplay::new();
+        d.set_allow_overdraw(true);
+        d
+    }
+
+    #[fixture]
+    fn display1() -> MockDisplay<Rgb888> {
+        display0()
+    }
+
+    #[rstest]
+    fn renders_direct_as_expected(
+        mut display0: MockDisplay<Rgb888>,
+        mut display1: MockDisplay<Rgb888>,
+    ) {
+        let config = || EmbeddedBackendConfig {
+            font_regular: FONT_4X6,
+            font_bold: None,
+            vertical_alignment: TerminalAlignment::Start,
+            horizontal_alignment: TerminalAlignment::Start,
+            ..Default::default()
+        };
+
+        //render "T" via ratatui and then " est" directly to the display retrieved from the backend
+        {
+            let backend = EmbeddedBackend::new(&mut display0, config());
+            let mut terminal = Terminal::new(backend).expect("to create terminal");
+            terminal
+                .draw(|frame| {
+                    use ratatui::text::Line;
+                    let content = Line::from("T").left_aligned();
+                    frame.render_widget(content, frame.area());
+                })
+                .expect("to draw");
+
+            let display = terminal.backend_mut().display_mut();
+
+            let text = {
+                let text_style = TextStyleBuilder::new()
+                    .alignment(Alignment::Left)
+                    .line_height(LineHeight::Percent(100))
+                    .baseline(embedded_graphics::text::Baseline::Top)
+                    .build();
+
+                Text::with_text_style(
+                    " est",
+                    Point::new(0, 0),
+                    MonoTextStyle::new(&FONT_4X6, Rgb888::WHITE),
+                    text_style,
+                )
+            };
+            text.draw(display).unwrap();
+        }
+
+        //render "Test" via ratatui
+        {
+            let backend = EmbeddedBackend::new(&mut display1, config());
+            let mut terminal = Terminal::new(backend).expect("to create terminal");
+
+            terminal
+                .draw(|frame| {
+                    use ratatui::text::Line;
+                    let content = Line::from("Test").left_aligned();
+                    frame.render_widget(content, frame.area());
+                })
+                .expect("to draw");
+        }
+
+        display0.assert_eq(&display1);
     }
 }

@@ -199,6 +199,31 @@ impl<'a> From<TermColor<'a>> for weact_studio_epd::TriColor {
     }
 }
 
+#[cfg(feature = "epd-waveshare")]
+impl From<TermColor> for epd_waveshare::color::Color {
+    fn from(color: TermColor) -> Self {
+        match BinaryColor::from(color) {
+            BinaryColor::Off => epd_waveshare::color::Color::Black,
+            BinaryColor::On => epd_waveshare::color::Color::White,
+        }
+    }
+}
+
+#[cfg(feature = "epd-waveshare")]
+impl From<TermColor> for epd_waveshare::color::TriColor {
+    fn from(color: TermColor) -> Self {
+        match color.0 {
+            Color::White => epd_waveshare::color::TriColor::White,
+            Color::Black => epd_waveshare::color::TriColor::Black,
+            Color::Red => epd_waveshare::color::TriColor::Chromatic,
+            _ => match color.1 {
+                TermColorType::Foreground => epd_waveshare::color::TriColor::Black,
+                TermColorType::Background => epd_waveshare::color::TriColor::White,
+            },
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -309,6 +334,38 @@ mod tests {
         #[case] color_into: weact_studio_epd::TriColor,
     ) {
         let output: weact_studio_epd::TriColor = themed(color_type, color_from).into();
+        assert_eq!(output, color_into);
+    }
+
+    #[cfg(feature = "epd-waveshare")]
+    #[rstest]
+    #[case(Foreground, Black, epd_waveshare::color::Color::Black)]
+    #[case(Background, Black, epd_waveshare::color::Color::Black)]
+    #[case(Foreground, White, epd_waveshare::color::Color::White)]
+    #[case(Background, White, epd_waveshare::color::Color::White)]
+    fn into_waveshare_color(
+        #[case] color_type: TermColorType,
+        #[case] color_from: Color,
+        #[case] color_into: epd_waveshare::color::Color,
+    ) {
+        let output: epd_waveshare::color::Color = TermColor(color_from, color_type).into();
+        assert_eq!(output, color_into);
+    }
+
+    #[cfg(feature = "epd-waveshare")]
+    #[rstest]
+    #[case(Foreground, Black, epd_waveshare::color::TriColor::Black)]
+    #[case(Background, Black, epd_waveshare::color::TriColor::Black)]
+    #[case(Foreground, White, epd_waveshare::color::TriColor::White)]
+    #[case(Background, White, epd_waveshare::color::TriColor::White)]
+    #[case(Foreground, Red, epd_waveshare::color::TriColor::Chromatic)]
+    #[case(Background, Red, epd_waveshare::color::TriColor::Chromatic)]
+    fn into_wavesharet_tricolor(
+        #[case] color_type: TermColorType,
+        #[case] color_from: Color,
+        #[case] color_into: epd_waveshare::color::TriColor,
+    ) {
+        let output: epd_waveshare::color::TriColor = TermColor(color_from, color_type).into();
         assert_eq!(output, color_into);
     }
 }

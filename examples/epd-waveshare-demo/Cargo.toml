@@ -1,0 +1,18 @@
+[package]
+name         = "epd-waveshare-demo"
+version      = "0.1.0"
+edition      = "2024"
+rust-version = "1.88"
+publish      = false
+
+[dependencies]
+esp-bootloader-esp-idf = { version = "0.2.0", features = ["esp32s3"] }
+esp-hal                = { version = "1.0.0", features = ["esp32s3", "unstable"] }
+
+critical-section = "1.2.0"
+esp-alloc        = "0.9.0"
+epd-waveshare = { workspace = true, features = ["graphics"] }
+embedded-hal-bus = "0.3.0"
+ratatui = { workspace = true }
+ratatui-core = { workspace = true }
+mousefood = { path = "../../mousefood/", features = ["epd-waveshare"] }
