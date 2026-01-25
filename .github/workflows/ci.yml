@@ -109,7 +109,7 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
       - name: Run lib tests
-        run: cargo test --locked --lib --features epd-weact
+        run: cargo test --locked --lib --all-features
       - name: Run doctests
         run: cargo test --locked -p mousefood --doc
       - name: Cache Cargo dependencies
