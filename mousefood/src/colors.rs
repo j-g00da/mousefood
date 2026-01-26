@@ -77,7 +77,7 @@ impl ColorTheme {
     }
 
     /// Tokyo Night color theme - a popular dark theme with blue/purple tones.
-    pub const fn tokio_night() -> Self {
+    pub const fn tokyo_night() -> Self {
         Self {
             foreground: Rgb888::new(0xa9, 0xb1, 0xd6), // Light blue-gray text
             background: Rgb888::new(0x1a, 0x1b, 0x26), // Dark blue-black background
@@ -200,7 +200,7 @@ impl<'a> From<TermColor<'a>> for weact_studio_epd::TriColor {
 }
 
 #[cfg(feature = "epd-waveshare")]
-impl From<TermColor> for epd_waveshare::color::Color {
+impl From<TermColor<'_>> for epd_waveshare::color::Color {
     fn from(color: TermColor) -> Self {
         match BinaryColor::from(color) {
             BinaryColor::Off => epd_waveshare::color::Color::Black,
@@ -210,7 +210,7 @@ impl From<TermColor> for epd_waveshare::color::Color {
 }
 
 #[cfg(feature = "epd-waveshare")]
-impl From<TermColor> for epd_waveshare::color::TriColor {
+impl From<TermColor<'_>> for epd_waveshare::color::TriColor {
     fn from(color: TermColor) -> Self {
         match color.0 {
             Color::White => epd_waveshare::color::TriColor::White,
@@ -348,7 +348,7 @@ mod tests {
         #[case] color_from: Color,
         #[case] color_into: epd_waveshare::color::Color,
     ) {
-        let output: epd_waveshare::color::Color = TermColor(color_from, color_type).into();
+        let output: epd_waveshare::color::Color = themed(color_type, color_from).into();
         assert_eq!(output, color_into);
     }
 
@@ -365,7 +365,7 @@ mod tests {
         #[case] color_from: Color,
         #[case] color_into: epd_waveshare::color::TriColor,
     ) {
-        let output: epd_waveshare::color::TriColor = TermColor(color_from, color_type).into();
+        let output: epd_waveshare::color::TriColor = themed(color_type, color_from).into();
         assert_eq!(output, color_into);
     }
 }

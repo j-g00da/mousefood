@@ -106,22 +106,28 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 Colors can be remapped using `color_theme` on `EmbeddedBackendConfig`.
 By default the ANSI palette is used.
 
-```rust,ignore
+```rust
 use mousefood::{ColorTheme, EmbeddedBackend, EmbeddedBackendConfig};
-use mousefood::embedded_graphics::pixelcolor::Rgb888;
+use mousefood::embedded_graphics::{mock_display::MockDisplay, pixelcolor::Rgb888};
 
-let theme = ColorTheme {
-    background: Rgb888::new(5, 5, 5),
-    foreground: Rgb888::new(240, 240, 240),
-    yellow: Rgb888::new(255, 200, 0),
-    ..ColorTheme::ansi()
-};
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut display = MockDisplay::<Rgb888>::new();
 
-let config = EmbeddedBackendConfig {
-    color_theme: theme,
-    ..Default::default()
-};
-let backend = EmbeddedBackend::new(&mut display, config);
+
+    let theme = ColorTheme {
+        background: Rgb888::new(5, 5, 5),
+        foreground: Rgb888::new(240, 240, 240),
+        yellow: Rgb888::new(255, 200, 0),
+        ..ColorTheme::ansi()
+    };
+
+    let config = EmbeddedBackendConfig {
+        color_theme: theme,
+        ..Default::default()
+    };
+    let backend = EmbeddedBackend::new(&mut display, config);
+    Ok(())
+}
 ```
 
 #### Built-in themes
@@ -131,7 +137,7 @@ Mousefood includes popular color themes that can be used directly.
 Available themes:
 
 - `ColorTheme::ansi()` - Standard ANSI colors (default)
-- `ColorTheme::tokionight()` - Tokyo Night dark theme with blue/purple tones
+- `ColorTheme::tokyo_night()` - Tokyo Night dark theme with blue/purple tones
 
 ### Simulator
 
