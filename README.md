@@ -130,9 +130,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 #### Built-in themes
 
-Mousefood includes popular color themes that can be used directly.
-
-Available themes:
+Mousefood includes popular color themes that can be used directly:
 
 - `ColorTheme::ansi()` - Standard ANSI colors (default)
 - `ColorTheme::tokyo_night()` - Tokyo Night dark theme with blue/purple tones
