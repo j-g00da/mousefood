@@ -144,7 +144,7 @@ impl<'a> TermColor<'a> {
         Self(color, color_type, theme)
     }
 
-    fn to_rgb888(&self) -> Rgb888 {
+    fn to_rgb888(self) -> Rgb888 {
         self.2.resolve(self.0, self.1)
     }
 }

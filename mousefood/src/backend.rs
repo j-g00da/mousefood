@@ -125,14 +125,17 @@ where
 {
     fn init(
         display: &'display mut D,
-        flush_callback: impl FnMut(&mut D) + 'static,
-        font_regular: MonoFont<'static>,
-        font_bold: Option<MonoFont<'static>>,
-        font_italic: Option<MonoFont<'static>>,
-        vertical_alignment: TerminalAlignment,
-        horizontal_alignment: TerminalAlignment,
-        color_theme: ColorTheme,
+        config: EmbeddedBackendConfig<D, C>,
     ) -> EmbeddedBackend<'display, D, C> {
+        let EmbeddedBackendConfig {
+            flush_callback,
+            font_regular,
+            font_bold,
+            font_italic,
+            vertical_alignment,
+            horizontal_alignment,
+            color_theme,
+        } = config;
         let pixels = layout::Size {
             width: display.bounding_box().size.width as u16,
             height: display.bounding_box().size.height as u16,
@@ -178,16 +181,7 @@ where
         display: &'display mut D,
         config: EmbeddedBackendConfig<D, C>,
     ) -> EmbeddedBackend<'display, D, C> {
-        Self::init(
-            display,
-            config.flush_callback,
-            config.font_regular,
-            config.font_bold,
-            config.font_italic,
-            config.vertical_alignment,
-            config.horizontal_alignment,
-            config.color_theme,
-        )
+        Self::init(display, config)
     }
 
     /// Borrow the display
