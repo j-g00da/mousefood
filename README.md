@@ -112,8 +112,6 @@ use mousefood::embedded_graphics::{mock_display::MockDisplay, pixelcolor::Rgb888
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut display = MockDisplay::<Rgb888>::new();
-
-
     let theme = ColorTheme {
         background: Rgb888::new(5, 5, 5),
         foreground: Rgb888::new(240, 240, 240),
