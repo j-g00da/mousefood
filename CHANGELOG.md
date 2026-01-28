@@ -4,16 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ## [0.3.0] - 2026-01-28
 
+Mousefood now depends on [Ratatui 0.30](https://ratatui.rs/highlights/v030/) and supports `no_std` environments!
+
 ### 🚀 Features
 
+- *(backend)* Make framebuffer optional via feature flag ([#119](https://github.com/ratatui/mousefood/issues/119))
+- *(backend)* Support clearing when framebuffer is disabled ([#147](https://github.com/ratatui/mousefood/issues/147))
+- *(backend)* Support epd_waveshare ([#127](https://github.com/ratatui/mousefood/issues/127))
+- *(backend)* Support color themes ([#136](https://github.com/ratatui/mousefood/issues/136))
+- *(backend)* Add display/display_mut methods to EmbeddedBackend ([#122](https://github.com/ratatui/mousefood/issues/122))
 - *(simulator)* [**breaking**] Removed simulator feature ([#83](https://github.com/ratatui/mousefood/issues/83))
 - *(framebuffer)* Export framebuffer to be consumed by integration crates ([#105](https://github.com/ratatui/mousefood/issues/105))
 - [**breaking**] Configurable terminal alignment ([#110](https://github.com/ratatui/mousefood/issues/110))
-- Make framebuffer optional via feature flag ([#119](https://github.com/ratatui/mousefood/issues/119))
-- *(backend)* Support epd_waveshare ([#127](https://github.com/ratatui/mousefood/issues/127))
-- *(backend)* Add display/display_mut methods to EmbeddedBackend ([#122](https://github.com/ratatui/mousefood/issues/122))
-- *(backend)* Support color themes ([#136](https://github.com/ratatui/mousefood/issues/136))
-- *(backend)* Support clearing when framebuffer is disabled ([#147](https://github.com/ratatui/mousefood/issues/147))
 
 ### 🐛 Bug Fixes
 
