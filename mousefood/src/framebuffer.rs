@@ -9,7 +9,7 @@
 
 use alloc::{vec, vec::IntoIter, vec::Vec};
 
-use crate::colors::{TermColor, TermColorType};
+use crate::colors::{ColorTheme, TermColor, TermColorType};
 use embedded_graphics::Pixel;
 use embedded_graphics::draw_target::DrawTarget;
 use embedded_graphics::geometry::Dimensions;
@@ -34,7 +34,7 @@ pub struct HeapBuffer<C: PixelColor + Copy> {
     bounding_box: Rectangle,
 }
 
-impl<C: PixelColor + From<TermColor>> HeapBuffer<C> {
+impl<C: PixelColor + for<'a> From<TermColor<'a>>> HeapBuffer<C> {
     /// Creates a new framebuffer with the specified dimensions.
     ///
     /// The framebuffer is initialized with a background color derived from [`Color::Reset`].
@@ -54,10 +54,10 @@ impl<C: PixelColor + From<TermColor>> HeapBuffer<C> {
     ///
     /// This method allocates `width × height × sizeof(C)` bytes of memory on the heap,
     /// where `C` is the pixel color type.
-    pub fn new(bounding_box: Rectangle) -> HeapBuffer<C> {
+    pub fn new(bounding_box: Rectangle, color_theme: ColorTheme) -> HeapBuffer<C> {
         Self {
             data: vec![
-                TermColor(Color::Reset, TermColorType::Background).into();
+                TermColor::new(Color::Reset, TermColorType::Background, &color_theme).into();
                 (bounding_box.size.width * bounding_box.size.height) as usize
             ],
             bounding_box,
@@ -125,7 +125,10 @@ mod tests {
 
     #[fixture]
     fn heap_buffer() -> HeapBuffer<Rgb888> {
-        HeapBuffer::new(Rectangle::new(Point::zero(), Size::new(16, 8)))
+        HeapBuffer::new(
+            Rectangle::new(Point::zero(), Size::new(16, 8)),
+            ColorTheme::default(),
+        )
     }
 
     #[fixture]

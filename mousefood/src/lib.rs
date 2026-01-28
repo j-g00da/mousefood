@@ -13,6 +13,7 @@ mod macros;
 pub mod prelude;
 
 pub use backend::{EmbeddedBackend, EmbeddedBackendConfig, TerminalAlignment};
+pub use colors::ColorTheme;
 pub use embedded_graphics;
 
 #[cfg(feature = "fonts")]

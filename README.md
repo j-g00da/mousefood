@@ -101,6 +101,40 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
      style="max-width: 640px"/>
 </div>
 
+### Color theme
+
+Colors can be remapped using `color_theme` on `EmbeddedBackendConfig`.
+By default the ANSI palette is used.
+
+```rust
+use mousefood::{ColorTheme, EmbeddedBackend, EmbeddedBackendConfig};
+use mousefood::embedded_graphics::{mock_display::MockDisplay, pixelcolor::Rgb888};
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut display = MockDisplay::<Rgb888>::new();
+    let theme = ColorTheme {
+        background: Rgb888::new(5, 5, 5),
+        foreground: Rgb888::new(240, 240, 240),
+        yellow: Rgb888::new(255, 200, 0),
+        ..ColorTheme::ansi()
+    };
+
+    let config = EmbeddedBackendConfig {
+        color_theme: theme,
+        ..Default::default()
+    };
+    let backend = EmbeddedBackend::new(&mut display, config);
+    Ok(())
+}
+```
+
+#### Built-in themes
+
+Mousefood includes popular color themes that can be used directly:
+
+- `ColorTheme::ansi()` - Standard ANSI colors (default)
+- `ColorTheme::tokyo_night()` - Tokyo Night dark theme with blue/purple tones
+
 ### Simulator
 
 Mousefood can be run in a simulator using
