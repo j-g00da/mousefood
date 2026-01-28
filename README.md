@@ -248,8 +248,11 @@ which can make the resulting binary even larger.
 Mousefood is hardware-agnostic.
 Successfully tested on:
 
-- esp32 (base model, 4MB flash)
-- esp32c6 (16MB flash)
+- ESP32 (Xtensa)
+- ESP32-C6 (RISC-V)
+- STM32
+- RP2040
+- RP2350
 
 ## Docs
 
