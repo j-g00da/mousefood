@@ -161,4 +161,6 @@ jobs:
         with:
           default: true
       - uses: Swatinem/rust-cache@v2
-      - run: cargo build --release --features=std --target ${{ matrix.target }} -Zbuild-std=std,panic_abort -Zbuild-std-features=panic_immediate_abort
+      - run: cargo build --release --features=std --target ${{ matrix.target }} -Zbuild-std=std,panic_abort
+        env:
+          RUSTFLAGS: "-Zunstable-options -Cpanic=immediate-abort"
