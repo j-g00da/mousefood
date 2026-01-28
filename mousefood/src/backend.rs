@@ -311,7 +311,16 @@ where
 
     #[cfg(not(feature = "framebuffer"))]
     fn clear(&mut self) -> Result<()> {
-        Ok(())
+        self.display
+            .clear(
+                TermColor::new(
+                    style::Color::Reset,
+                    TermColorType::Background,
+                    &self.color_theme,
+                )
+                .into(),
+            )
+            .map_err(|_| crate::error::Error::DrawError)
     }
 
     fn clear_region(&mut self, clear_type: ClearType) -> Result<()> {
