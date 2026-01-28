@@ -8,7 +8,7 @@ mod colors;
 mod default_font;
 pub mod error;
 #[cfg(feature = "framebuffer")]
-pub mod framebuffer;
+mod framebuffer;
 mod macros;
 pub mod prelude;
 
