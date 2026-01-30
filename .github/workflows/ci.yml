@@ -70,7 +70,12 @@ jobs:
             dir: examples/mousefood-esp32-std-demo
             target: xtensa-esp32-espidf
             setup_xtensa: true
-          # EPD Waveshare demo 
+          # no-std demo
+          - name: esp32-no-std-demo
+            dir: examples/esp32-no-std-demo
+            target: ""
+            setup_xtensa: true
+          # EPD Waveshare demo
           - name: epd-waveshare-demo
             dir: examples/epd-waveshare-demo
             target: ""

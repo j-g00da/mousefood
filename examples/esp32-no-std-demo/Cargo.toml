@@ -1,0 +1,34 @@
+[package]
+name = "esp32-no-std-demo"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[[bin]]
+name = "esp32-no-std-demo"
+harness = false # do not use the built in cargo test harness -> resolve rust-analyzer errors
+
+# Commented out due to workspace profiles being used
+# Feel free to uncomment and adjust if you have copied this outside of a workspace
+#
+# [profile.release]
+# opt-level = 3
+#
+# [profile.dev]
+# Symbols are nice and they don't increase the size on Flash
+# debug = true
+# opt-level = 3
+
+[dependencies]
+esp-hal = { version = "~1.0", features = ["esp32", "log-04", "unstable"] }
+esp-bootloader-esp-idf = { version = "0.4.0", features = ["esp32", "log-04"] }
+esp-alloc = "0.9.0"
+esp-println = { version = "0.16.1", features = ["esp32", "log-04"] }
+embedded-hal-bus = "0.3.0"
+mipidsi = "0.9.0"
+critical-section = "1.2.0"
+mousefood = { path = "../../mousefood/" }
+ratatui = { workspace = true, default-features = false, features = ["all-widgets"] }
+log = "0.4.27"
+time = { version = "0.3.45", default-features = false }
+libm = "0.2.16"
