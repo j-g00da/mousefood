@@ -1,3 +1,6 @@
+# This file lives at workspace root because esp-idf-sys looks for it there.
+# See <https://github.com/esp-rs/esp-idf-sys/blob/dc61350013fd375a532d7d93ee91edf117433267/build/pio.rs#L114>
+
 # Rust often needs a bit of an extra main task stack size compared to C (the default is 3K)
 CONFIG_ESP_MAIN_TASK_STACK_SIZE=16384
 
