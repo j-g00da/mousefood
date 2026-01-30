@@ -248,11 +248,21 @@ which can make the resulting binary even larger.
 Mousefood is hardware-agnostic.
 Successfully tested on:
 
+### Microcontrollers
+
 - ESP32 (Xtensa)
 - ESP32-C6 (RISC-V)
 - STM32
 - RP2040
 - RP2350
+
+### Displays
+
+- SSD1306 with [ssd1306](https://crates.io/crates/ssd1306)
+- ILI9341 with [mipidsi](https://crates.io/crates/mipidsi)
+- ST7735 with [mipidsi](https://crates.io/crates/mipidsi)
+
+Send a pull request to add your microcontroller or display here!
 
 ## Docs
 
