@@ -1,0 +1,16 @@
+# This file lives at workspace root because esp-idf-sys looks for it there.
+# See <https://github.com/esp-rs/esp-idf-sys/blob/dc61350013fd375a532d7d93ee91edf117433267/build/pio.rs#L114>
+
+# Rust often needs a bit of an extra main task stack size compared to C (the default is 3K)
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=16384
+
+# For better backtrace for stack overflows
+CONFIG_FREERTOS_CHECK_STACKOVERFLOW_CANARY=y
+
+# Use this to set FreeRTOS kernel tick frequency to 1000 Hz (100 Hz by default).
+# This allows to use 1 ms granularity for thread sleeps (10 ms by default).
+#CONFIG_FREERTOS_HZ=1000
+
+# Workaround for https://github.com/espressif/esp-idf/issues/7631
+#CONFIG_MBEDTLS_CERTIFICATE_BUNDLE=n
+#CONFIG_MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL=n

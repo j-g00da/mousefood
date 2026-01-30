@@ -629,29 +629,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "embassy-executor"
-version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "90327bcc66333a507f89ecc4e2d911b265c45f5c9bc241f98eee076752d35ac6"
-dependencies = [
- "critical-section",
- "document-features",
- "embassy-executor-macros",
-]
-
-[[package]]
-name = "embassy-executor-macros"
-version = "0.6.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3577b1e9446f61381179a330fc5324b01d511624c55f25e3c66c9e3c626dbecf"
-dependencies = [
- "darling 0.20.11",
- "proc-macro2",
- "quote",
- "syn 2.0.114",
-]
-
-[[package]]
 name = "embassy-futures"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -691,25 +668,6 @@ dependencies = [
  "embedded-io-async 0.6.1",
  "futures-core",
  "futures-sink",
- "heapless",
-]
-
-[[package]]
-name = "embassy-time-driver"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a0a244c7dc22c8d0289379c8d8830cae06bb93d8f990194d0de5efb3b5ae7ba6"
-dependencies = [
- "document-features",
-]
-
-[[package]]
-name = "embassy-time-queue-utils"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dc55c748d16908a65b166d09ce976575fb8852cf60ccd06174092b41064d8f83"
-dependencies = [
- "embassy-executor",
  "heapless",
 ]
 
@@ -1149,8 +1107,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2bc07aaba257d28d54a96af005ca67d0b38876d8837f5d54a3e0547e100b219c"
 dependencies = [
  "embassy-futures",
- "embassy-time-driver",
- "embassy-time-queue-utils",
  "embedded-hal-async",
  "embedded-svc",
  "embuild",
@@ -1271,6 +1227,20 @@ checksum = "b76170a463d18f888a1ad258031901036fd827a9ef126733053ba5f8739fb0c8"
 dependencies = [
  "critical-section",
  "vcell",
+]
+
+[[package]]
+name = "esp32-std-demo"
+version = "0.1.0"
+dependencies = [
+ "embuild",
+ "esp-idf-svc",
+ "mipidsi",
+ "mousefood",
+ "rand",
+ "ratatui",
+ "time",
+ "tui-big-text",
 ]
 
 [[package]]
@@ -1928,20 +1898,6 @@ dependencies = [
  "rstest",
  "thiserror 2.0.18",
  "weact-studio-epd",
-]
-
-[[package]]
-name = "mousefood-esp32-std-demo"
-version = "0.1.0"
-dependencies = [
- "embuild",
- "esp-idf-svc",
- "mipidsi",
- "mousefood",
- "rand",
- "ratatui",
- "time",
- "tui-big-text",
 ]
 
 [[package]]

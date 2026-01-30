@@ -67,10 +67,10 @@ jobs:
             setup_xtensa: false
           # ESP-IDF demo using Xtensa toolchain
           - name: esp32-std-demo
-            dir: examples/mousefood-esp32-std-demo
+            dir: examples/esp32-std-demo
             target: xtensa-esp32-espidf
             setup_xtensa: true
-          # EPD Waveshare demo 
+          # EPD Waveshare demo
           - name: epd-waveshare-demo
             dir: examples/epd-waveshare-demo
             target: ""
