@@ -1,10 +1,11 @@
 use core::marker::PhantomData;
 
 use crate::button::Button;
-use alloc::format;
+use alloc::{format, vec};
 use esp_hal::delay::Delay;
 use ratatui::prelude::*;
-use ratatui::widgets::{Block, BorderType, Padding, Paragraph};
+use ratatui::widgets::{Block, BorderType, Padding};
+use tui_big_text::{BigText, PixelSize};
 
 pub struct VoltageApp<B: Backend> {
     _marker: PhantomData<B>,
@@ -54,10 +55,12 @@ impl<B: Backend> VoltageApp<B> {
         frame.render_widget(block, content_area);
 
         let voltage_text = format!("{:.2}V", voltage as f32 / 1000.0);
-        let voltage_line = Line::from(voltage_text)
-            .centered()
-            .style(Style::new().blue());
-        frame.render_widget(Paragraph::new(voltage_line), inner_area);
+        let big_text = BigText::builder()
+            .pixel_size(PixelSize::Full)
+            .style(Style::new().blue())
+            .lines(vec![voltage_text.into()])
+            .build();
+        frame.render_widget(big_text, inner_area);
 
         let footer = Line::raw("[S1] to change screen").centered().gray();
         frame.render_widget(footer, footer_area);
