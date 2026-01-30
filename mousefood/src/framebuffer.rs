@@ -74,12 +74,12 @@ impl<C: PixelColor> IntoIterator for HeapBuffer<C> {
     }
 }
 
-impl<C: PixelColor> IntoIterator for &HeapBuffer<C> {
+impl<'a, C: PixelColor + Copy> IntoIterator for &'a HeapBuffer<C> {
     type Item = C;
-    type IntoIter = IntoIter<Self::Item>;
+    type IntoIter = core::iter::Copied<core::slice::Iter<'a, C>>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.data.clone().into_iter()
+        self.data.iter().copied()
     }
 }
 
