@@ -1,14 +1,12 @@
 [package]
-name = "mousefood-esp32-std-demo"
+name = "esp32-std-demo"
 version = "0.1.0"
-authors = ["Jagoda Estera Ślązak <jslazak@jslazak.com>"]
 edition = "2024"
-rust-version = "1.85.0"
 publish = false
 
 [[bin]]
-name = "mousefood-esp32-std-demo"
-harness = false                   # do not use the built in cargo test harness -> resolve rust-analyzer errors
+name = "esp32-std-demo"
+harness = false # do not use the built in cargo test harness -> resolve rust-analyzer errors
 
 # Commented out due to workspace profiles being used
 # Feel free to uncomment and adjust if you have copied this outside of a workspace
