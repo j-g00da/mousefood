@@ -1342,6 +1342,7 @@ dependencies = [
  "mousefood",
  "ratatui",
  "time",
+ "tui-big-text 0.8.1",
 ]
 
 [[package]]
@@ -2018,7 +2019,7 @@ dependencies = [
  "rand",
  "ratatui",
  "time",
- "tui-big-text",
+ "tui-big-text 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3043,6 +3044,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a3198b4b0a8e11f09dd03e133c0280504d0801269e9afa46362ffde1cbeebf44"
 dependencies = [
  "winnow",
+]
+
+[[package]]
+name = "tui-big-text"
+version = "0.8.1"
+dependencies = [
+ "derive_builder",
+ "font8x8",
+ "itertools 0.14.0",
+ "ratatui-core",
 ]
 
 [[package]]
