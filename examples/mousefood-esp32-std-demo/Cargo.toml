@@ -12,11 +12,13 @@ harness = false                   # do not use the built in cargo test harness -
 
 # Commented out due to workspace profiles being used
 # Feel free to uncomment and adjust if you have copied this outside of a workspace
+#
 # [profile.release]
 # opt-level = 3
 #
 # [profile.dev]
-# debug = true    # Symbols are nice and they don't increase the size on Flash
+# Symbols are nice and they don't increase the size on Flash
+# debug = true
 # opt-level = 3
 
 [features]
