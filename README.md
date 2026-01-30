@@ -248,11 +248,26 @@ which can make the resulting binary even larger.
 Mousefood is hardware-agnostic.
 Successfully tested on:
 
+### Microcontrollers
+
 - ESP32 (Xtensa)
 - ESP32-C6 (RISC-V)
 - STM32
 - RP2040
 - RP2350
+
+### Display drivers
+
+For every driver, the list of displays is not exhaustive.
+
+- [ssd1306](https://crates.io/crates/ssd1306) for SSD1306
+- [mipidsi](https://crates.io/crates/mipidsi) for ILI9341, ST7735, etc.
+- [epd-waveshare](https://crates.io/crates/epd-waveshare) for e-paper displays from Waveshare
+  (requires enabling `epd-waveshare` feature)
+- [weact-studio-epd](https://crates.io/crates/weact-studio-epd) for e-paper displays
+  from WeAct Studio (requires enabling `epd-weact` feature)
+
+Send a pull request to add your microcontroller or display driver here!
 
 ## Docs
 
