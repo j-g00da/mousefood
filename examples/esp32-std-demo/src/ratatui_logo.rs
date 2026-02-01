@@ -59,7 +59,7 @@ impl<B: Backend> RatatuiLogoApp<B> {
             ratatui_url_area,
         );
         frame.render_widget(
-            "github.com/j-g00da/mousefood".gray().underlined(),
+            "github.com/ratatui/mousefood".gray().underlined(),
             mousefood_url_area,
         );
 
