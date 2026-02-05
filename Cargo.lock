@@ -1283,21 +1283,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "esp32-std-demo"
-
-version = "0.1.0"
-dependencies = [
- "embuild",
- "esp-idf-svc",
- "mipidsi",
- "mousefood",
- "rand",
- "ratatui",
- "time",
- "tui-big-text",
-]
-
-[[package]]
 name = "esp32-no-std-demo"
 version = "0.1.0"
 dependencies = [
@@ -1313,6 +1298,20 @@ dependencies = [
  "mousefood",
  "ratatui",
  "time",
+]
+
+[[package]]
+name = "esp32-std-demo"
+version = "0.1.0"
+dependencies = [
+ "embuild",
+ "esp-idf-svc",
+ "mipidsi",
+ "mousefood",
+ "rand",
+ "ratatui",
+ "time",
+ "tui-big-text",
 ]
 
 [[package]]
@@ -1965,7 +1964,7 @@ dependencies = [
 
 [[package]]
 name = "mousefood"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "embedded-graphics",
  "embedded-graphics-unicodefonts",
