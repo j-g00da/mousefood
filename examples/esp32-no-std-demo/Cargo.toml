@@ -32,3 +32,4 @@ ratatui = { workspace = true, default-features = false, features = ["all-widgets
 log = "0.4.27"
 time = { version = "0.3.45", default-features = false }
 libm = "0.2.16"
+tui-big-text = "0.8.2"
