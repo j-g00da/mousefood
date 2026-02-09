@@ -1283,21 +1283,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "esp32-std-demo"
-
-version = "0.1.0"
-dependencies = [
- "embuild",
- "esp-idf-svc",
- "mipidsi",
- "mousefood",
- "rand",
- "ratatui",
- "time",
- "tui-big-text",
-]
-
-[[package]]
 name = "esp32-no-std-demo"
 version = "0.1.0"
 dependencies = [
@@ -1313,6 +1298,21 @@ dependencies = [
  "mousefood",
  "ratatui",
  "time",
+ "tui-big-text",
+]
+
+[[package]]
+name = "esp32-std-demo"
+version = "0.1.0"
+dependencies = [
+ "embuild",
+ "esp-idf-svc",
+ "mipidsi",
+ "mousefood",
+ "rand",
+ "ratatui",
+ "time",
+ "tui-big-text",
 ]
 
 [[package]]
@@ -3004,9 +3004,9 @@ dependencies = [
 
 [[package]]
 name = "tui-big-text"
-version = "0.8.1"
+version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0cb3cf7714229ca4503c1b94050bce7ae4f5bbcf9e5b3d24bee858f15ef23cef"
+checksum = "b3524088df83a9214c4a84648c5812d6aa9f930a4172a1604706468e8b98bed1"
 dependencies = [
  "derive_builder",
  "font8x8",
