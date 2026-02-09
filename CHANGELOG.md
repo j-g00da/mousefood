@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2026-02-09
+
+### 🚀 Features
+
+- *(demo)* Add esp32-no-std demo example ([#158](https://github.com/ratatui/mousefood/issues/158))
+
+### 🚜 Refactor
+
+- *(backend)* [**breaking**] Remove `framebuffer` from the public API ([#149](https://github.com/ratatui/mousefood/issues/149))
+- *(examples)* Improve the esp32-std-demo ([#157](https://github.com/ratatui/mousefood/issues/157))
+
+### 📚 Documentation
+
+- *(readme)* List display drivers tested by the community ([#155](https://github.com/ratatui/mousefood/issues/155))
+- *(readme)* Recommend disabling framebuffer for EPD drivers ([#162](https://github.com/ratatui/mousefood/issues/162))
+
+### ⚡ Performance
+
+- *(framebuffer)* Avoid cloning during flush for every frame ([#153](https://github.com/ratatui/mousefood/issues/153))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(esp32-no-std)* Use tui-bigtext for voltage UI ([#159](https://github.com/ratatui/mousefood/issues/159))
+
 ## [0.3.0] - 2026-01-28
 
 Mousefood now depends on [Ratatui 0.30](https://ratatui.rs/highlights/v030/) and supports `no_std` environments!

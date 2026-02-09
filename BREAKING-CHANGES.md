@@ -5,7 +5,8 @@ This document lists all breaking changes along with tips to help you migrate smo
 ## Summary
 
 - [unreleased](#unreleased)
-  - framebuffer module is no longer part of the public API
+- [v0.4.0](#v040)
+  - `framebuffer` module is no longer part of the public API
 - [v0.3.0](#v030)
   - Feature `simulator` is removed
   - Type of `EmbeddedBackendConfig::font_bold` is now `Option<MonoFont<'static>>`
@@ -23,6 +24,8 @@ This document lists all breaking changes along with tips to help you migrate smo
 - [v0.0.1](#v001---initial-release) - initial release
 
 ## Unreleased
+
+## [v0.4.0](https://github.com/ratatui/mousefood/releases/tag/0.4.0)
 
 ### `framebuffer` module is no longer part of the public API ([#149])
 
