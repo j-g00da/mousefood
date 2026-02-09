@@ -172,6 +172,14 @@ crate docs and apply the same `flush_callback` pattern used in the [Waveshare ex
 <details>
   <summary>Setup example</summary>
 
+EPD drivers include their own internal buffers, so the mousefood framebuffer
+adds memory overhead with no benefit. Disable default features to turn it off:
+
+```toml
+[dependencies]
+mousefood = { version = "*", default-features = false, features = ["epd-weact"] }
+```
+
 ```rust,ignore
 use mousefood::prelude::*;
 use weact_studio_epd::graphics::Display290BlackWhite;
@@ -208,6 +216,14 @@ Support for EPD (e-ink displays) produced by Waveshare Electronics
 
 <details>
   <summary>Setup example</summary>
+
+EPD drivers include their own internal buffers, so the mousefood framebuffer
+adds memory overhead with no benefit. Disable default features to turn it off:
+
+```toml
+[dependencies]
+mousefood = { version = "*", default-features = false, features = ["epd-waveshare"] }
+```
 
 ```rust,ignore
 use mousefood::prelude::*;
