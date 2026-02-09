@@ -15,4 +15,4 @@ epd-waveshare = { workspace = true, features = ["graphics"] }
 embedded-hal-bus = "0.3.0"
 ratatui = { workspace = true }
 ratatui-core = { workspace = true }
-mousefood = { path = "../../mousefood/", features = ["epd-waveshare"] }
+mousefood = { path = "../../mousefood/", default-features = false, features = ["epd-waveshare"] }
