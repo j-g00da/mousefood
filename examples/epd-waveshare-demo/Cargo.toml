@@ -6,7 +6,7 @@ rust-version = "1.88"
 publish      = false
 
 [dependencies]
-esp-bootloader-esp-idf = { version = "0.2.0", features = ["esp32s3"] }
+esp-bootloader-esp-idf = { version = "0.4.0", features = ["esp32s3"] }
 esp-hal                = { version = "1.0.0", features = ["esp32s3", "unstable"] }
 
 critical-section = "1.2.0"
