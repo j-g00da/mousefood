@@ -29,7 +29,7 @@ opt-level = 's'
 overflow-checks = false
 
 [workspace.dependencies]
-ratatui-core = { version = "0.1.0" }
+ratatui-core = "0.1.0"
 thiserror = { version = "2.0.18", default-features = false }
 embedded-graphics = "0.8.1"
 embedded-graphics-simulator = "0.8.0"
