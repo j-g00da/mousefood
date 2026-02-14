@@ -31,7 +31,7 @@ This document lists all breaking changes along with tips to help you migrate smo
 [#166]: https://github.com/ratatui/mousefood/pull/166
 
 The `underline-color` feature was previously enabled by default. It is now opt-in to save 8 bytes
-per terminal cell (4 bytes per cell in ratatui's two `Vec<Cell>` buffers), which also reduces
+per terminal cell (4 bytes per cell in Ratatui's two `Vec<Cell>` buffers), which also reduces
 bandwidth on memory-constrained embedded hardware.
 
 **Migration guide:**
