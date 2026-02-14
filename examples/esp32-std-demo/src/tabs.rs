@@ -2,7 +2,7 @@ use crate::lorem::LOREM_IPSUM;
 use esp_idf_svc::hal::delay;
 use esp_idf_svc::hal::gpio::{Gpio0, Input, PinDriver};
 use esp_idf_svc::hal::task::notification::Notification;
-use rand::{Rng, rng};
+use rand::{RngExt, rng};
 use ratatui::prelude::*;
 use ratatui::style::Style;
 use ratatui::widgets::calendar::{CalendarEventStore, Monthly};
