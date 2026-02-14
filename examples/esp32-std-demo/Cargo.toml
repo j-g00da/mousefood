@@ -26,7 +26,7 @@ experimental = ["esp-idf-svc/experimental"]
 [dependencies]
 esp-idf-svc = { version = "0.51", features = ["critical-section"] }
 time = "0.3.45"
-rand = "0.9.1"
+rand = "0.10.0"
 mipidsi = "0.9.0"
 mousefood = { path = "../../mousefood/" }
 tui-big-text = "0.8.1"
