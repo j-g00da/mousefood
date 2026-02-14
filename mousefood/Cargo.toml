@@ -26,12 +26,13 @@ rstest.workspace = true
 paste.workspace = true
 
 [features]
-default = ["fonts", "framebuffer"]
+default = ["fonts", "framebuffer", "underline-color"]
 std = ["thiserror/std", "ratatui-core/std"]
 fonts = ["dep:embedded-graphics-unicodefonts"]
 epd-weact = ["dep:weact-studio-epd"]
 epd-waveshare = ["dep:epd-waveshare"]
 framebuffer = []
+underline-color = ["ratatui-core/underline-color"]
 
 [lints]
 workspace = true
