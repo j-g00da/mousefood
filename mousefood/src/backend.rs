@@ -244,6 +244,7 @@ where
                 }
             }
 
+            #[cfg(feature = "underline-color")]
             if cell.underline_color != style::Color::Reset {
                 style_builder = style_builder.underline_with_color(
                     TermColor::new(

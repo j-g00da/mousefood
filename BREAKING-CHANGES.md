@@ -5,6 +5,7 @@ This document lists all breaking changes along with tips to help you migrate smo
 ## Summary
 
 - [unreleased](#unreleased)
+  - `underline-color` feature is now opt-in
 - [v0.4.0](#v040)
   - `framebuffer` module is no longer part of the public API
 - [v0.3.0](#v030)
@@ -24,6 +25,26 @@ This document lists all breaking changes along with tips to help you migrate smo
 - [v0.0.1](#v001---initial-release) - initial release
 
 ## Unreleased
+
+### `underline-color` feature is now opt-in ([#166])
+
+[#166]: https://github.com/ratatui/mousefood/pull/166
+
+The `underline-color` feature was previously enabled by default. It is now opt-in to save 8 bytes
+per terminal cell (4 bytes per cell in Ratatui's two `Vec<Cell>` buffers), which also reduces
+bandwidth on memory-constrained embedded hardware.
+
+#### Migration guide
+
+If you use per-cell underline colors, enable the feature explicitly:
+
+```diff
+[dependencies]
+- mousefood = "0.4.0"
++ mousefood = { version = "0.5.0", features = ["underline-color"] }
+```
+
+If you don't use underline colors, no changes are needed.
 
 ## [v0.4.0](https://github.com/ratatui/mousefood/releases/tag/0.4.0)
 
