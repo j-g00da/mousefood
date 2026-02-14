@@ -34,7 +34,7 @@ The `underline-color` feature was previously enabled by default. It is now opt-i
 per terminal cell (4 bytes per cell in Ratatui's two `Vec<Cell>` buffers), which also reduces
 bandwidth on memory-constrained embedded hardware.
 
-**Migration guide:**
+#### Migration guide
 
 If you use per-cell underline colors, enable the feature explicitly:
 
